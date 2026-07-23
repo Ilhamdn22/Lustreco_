@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>lustreco® | Shop</title>
+    <title>lustreco® | About</title>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -20,7 +20,7 @@
 <body class="bg-white text-gray-900 antialiased flex flex-col min-h-screen">
 
     <!-- Navbar Minimalis -->
-    <header id="main-header" class="sticky w-full top-0 z-40 bg-white border-b border-gray-100 px-8 py-5">
+    <header id="main-header" class="fixed w-full top-0 z-40 bg-white border-b border-gray-100 px-8 py-5">
         <div class="w-full flex items-center justify-between">
             <!-- Left: Menu Hamburger -->
             <button id="menu-btn" class="text-gray-800 hover:text-black focus:outline-none transition">
@@ -134,7 +134,7 @@
             
             <nav class="flex flex-col space-y-1 flex-grow">
                 <a href="{{ url('/products') }}" class="text-[14px] font-medium tracking-wide text-gray-900 hover:bg-[#d1d1d1] transition-colors px-4 py-3 rounded-lg block">SHOP</a>
-                <a href="{{ url('/about') }}" class="text-[14px] font-medium tracking-wide text-gray-900 hover:bg-[#d1d1d1] transition-colors px-4 py-3 rounded-lg block">ABOUT</a>
+                <a href="{{ url('/about') }}" class="text-[14px] font-medium tracking-wide text-gray-900 hover:bg-[#d1d1d1] transition-colors px-4 py-3 rounded-lg block bg-[#f0f0f0]">ABOUT</a>
                 <a href="#" class="text-[14px] font-medium tracking-wide text-gray-900 hover:bg-[#d1d1d1] transition-colors px-4 py-3 rounded-lg block">STORE</a>
             </nav>
         </div>
@@ -142,135 +142,55 @@
     
     <!-- Sidebar Overlay -->
     <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-30 z-40 hidden transition-opacity duration-300"></div>
-
+    
     <!-- Main Content -->
-    <main class="flex-grow w-full max-w-[1400px] mx-auto px-6 py-10 flex flex-col md:flex-row gap-12">
+    <main class="flex-grow pt-[140px] pb-10 px-8 flex flex-col justify-between">
+        <div class="max-w-[1200px] mx-auto text-center w-full">
+            <p class="text-[14px] leading-relaxed text-gray-800">
+                <strong>Lustreco</strong> is an Indonesian lifestyle retail brand founded in 2013. The label creates original, youth-driven clothing and accessories inspired by pop culture, street style, and anime.
+                <br><br>
+                Known for unisex designs and graphic storytelling, Lustreco has become a notable presence in Indonesia's fashion scene. The brand operates online through its website and major e-commerce platforms and is headquartered in South Tangerang, Indonesia.
+            </p>
+        </div>
         
-        <!-- Left Sidebar (Filters) -->
-        <aside class="w-full md:w-56 flex-shrink-0 hidden md:block">
-            <!-- Search -->
-            <form action="{{ url('/products') }}" method="GET" class="mb-8 relative">
-                <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search" class="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-md text-sm focus:outline-none focus:border-gray-400 transition">
-            </form>
+        <div class="mt-40">
+            <!-- Section Informasi Payment & Shipment -->
+            <section class="bg-white">
+                <div class="max-w-5xl mx-auto px-4 text-center">
+                    
+                    <!-- Payment Method -->
+                    <div class="mb-10">
+                        <h3 class="text-[13px] font-medium text-gray-600 mb-6">
+                            Payment Method
+                        </h3>
+                        <div class="flex flex-wrap items-center justify-center gap-6 md:gap-8 hover:opacity-100 transition-opacity">
+                            <img src="https://tse1.mm.bing.net/th/id/OIP.SJk3_1NbGUAvZ-bJslHM4wHaC0?r=0&pid=Api&P=0&h=180" alt="QRIS" class="h-6 object-contain">
+                            <img src="https://tse1.mm.bing.net/th/id/OIP.BgWRZO7z2VuHDvJVh4q-0gHaCT?r=0&pid=Api&P=0&h=180" alt="OVO" class="h-5 object-contain">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/Bank_Mandiri_logo_2016.svg" alt="Mandiri" class="h-5 object-contain">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/6/68/BANK_BRI_logo.svg" alt="BRI" class="h-5 object-contain">
+                            <img src="https://tse1.mm.bing.net/th/id/OIP.7ac-BBuYSK0mgmanTkM5hwHaCJ?r=0&pid=Api&P=0&h=180" alt="BNI" class="h-4 object-contain">
+                            <img src="https://tse2.mm.bing.net/th/id/OIP.nisHwf4UfdBIJWh6EcVA6gHaB2?r=0&pid=Api&P=0&h=180" alt="Permata Bank" class="h-5 object-contain">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a0/Bank_Syariah_Indonesia.svg" alt="BSI" class="h-5 object-contain">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/a/ac/CIMB_Niaga_logo.svg" alt="CIMB Niaga" class="h-5 object-contain">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" class="h-6 object-contain">
+                        </div>
+                    </div>
 
-            <!-- Categories -->
-            <div class="mb-8 border-b border-gray-100 pb-6">
-                <div class="flex justify-between items-center mb-5 cursor-pointer">
-                    <h3 class="font-medium text-sm text-gray-900">Categories</h3>
-                    <i class="fa-solid fa-chevron-up text-xs text-gray-500"></i>
-                </div>
-                <div class="space-y-4">
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="checkbox" class="form-checkbox h-4 w-4 text-black border-gray-300 rounded-[3px] focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">Tees</span>
-                    </label>
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="checkbox" class="form-checkbox h-4 w-4 text-black border-gray-300 rounded-[3px] focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">Shirts</span>
-                    </label>
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="checkbox" class="form-checkbox h-4 w-4 text-black border-gray-300 rounded-[3px] focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">Outerwear</span>
-                    </label>
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="checkbox" class="form-checkbox h-4 w-4 text-black border-gray-300 rounded-[3px] focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">Sweaters</span>
-                    </label>
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="checkbox" class="form-checkbox h-4 w-4 text-black border-gray-300 rounded-[3px] focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">Pants</span>
-                    </label>
-                    <button class="text-[13px] text-gray-900 font-medium mt-3 flex items-center hover:text-gray-600 transition">
-                        See More <i class="fa-solid fa-chevron-down text-[9px] ml-1.5"></i>
-                    </button>
-                </div>
-            </div>
+                    <!-- Shipment Method -->
+                    <div>
+                        <h3 class="text-[13px] font-medium text-gray-600 mb-4">
+                            Shipment Method
+                        </h3>
+                        <div class="flex justify-center items-center opacity-80">
+                            <img src="https://tse4.mm.bing.net/th/id/OIP.2j4gL2L4bv2w5hByr8syMgHaC-?r=0&pid=Api&P=0&h=180" alt="JNE Express" class="h-7 object-contain">
+                        </div>
+                    </div>
 
-            <!-- Product Type -->
-            <div class="mb-8 border-b border-gray-100 pb-6">
-                <div class="flex justify-between items-center mb-5 cursor-pointer">
-                    <h3 class="font-medium text-sm text-gray-900">Product Type</h3>
-                    <i class="fa-solid fa-chevron-up text-xs text-gray-500"></i>
                 </div>
-                <div class="space-y-4">
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="radio" name="product_type" checked class="form-radio h-4 w-4 text-black border-gray-300 focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">All Products</span>
-                    </label>
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="radio" name="product_type" class="form-radio h-4 w-4 text-black border-gray-300 focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">Discount</span>
-                    </label>
-                </div>
-            </div>
-
-            <!-- Availability -->
-            <div class="mb-8 border-b border-gray-100 pb-6">
-                <div class="flex justify-between items-center mb-5 cursor-pointer">
-                    <h3 class="font-medium text-sm text-gray-900">Availability</h3>
-                    <i class="fa-solid fa-chevron-up text-xs text-gray-500"></i>
-                </div>
-                <div class="space-y-4">
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="radio" name="availability" checked class="form-radio h-4 w-4 text-black border-gray-300 focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">All</span>
-                    </label>
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="radio" name="availability" class="form-radio h-4 w-4 text-black border-gray-300 focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">In Stock</span>
-                    </label>
-                </div>
-            </div>
-            
-            <!-- Price -->
-            <div class="mb-6">
-                <div class="flex justify-between items-center cursor-pointer">
-                    <h3 class="font-medium text-sm text-gray-900">Price</h3>
-                    <i class="fa-solid fa-chevron-up text-xs text-gray-500"></i>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Right Content (Product Grid) -->
-        <div class="flex-grow">
-            <!-- Top bar -->
-            <div class="flex justify-between items-center mb-10">
-                <h1 class="text-[17px] font-medium text-gray-900 tracking-wide">All Products</h1>
-                <div class="flex items-center space-x-1.5 border border-gray-200 rounded text-gray-700 px-3 py-1.5 cursor-pointer hover:border-gray-300 transition">
-                    <span class="text-[11px] text-gray-500">sort :</span>
-                    <span class="text-[11px] font-medium">Recent</span>
-                    <i class="fa-solid fa-chevron-down text-[9px] ml-1"></i>
-                </div>
-            </div>
-
-            <!-- Grid -->
-            @if($products->isEmpty())
-                <div class="py-16 text-center text-gray-500 border border-dashed border-gray-200 rounded-lg">
-                    <p>Belum ada produk yang tersedia saat ini.</p>
-                </div>
-            @else
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
-                    @foreach($products as $product)
-                        <a href="{{ url('/products/' . $product->id) }}" class="group cursor-pointer block">
-                            <!-- Image Container -->
-                            <div class="relative w-full aspect-square mb-4 bg-gray-50 overflow-hidden rounded-[2px]">
-                                <img src="{{ $product->image ?? 'https://via.placeholder.com/600' }}" alt="{{ $product->name }}" class="w-full h-full object-cover object-center group-hover:scale-[1.02] transition duration-500 ease-out">
-                            </div>
-                            <!-- Details -->
-                            <div class="text-left px-1">
-                                <h3 class="text-[13px] text-gray-900 leading-snug mb-1 font-medium group-hover:underline underline-offset-4 decoration-gray-300">{{ $product->name }}</h3>
-                                <p class="text-[12px] text-gray-500 mb-1.5">Lustreco</p>
-                                <p class="text-[13px] font-medium text-gray-900">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
-                            </div>
-                        </a>
-                    @endforeach
-                </div>
-            @endif
+            </section>
         </div>
     </main>
 
-    <!-- JS for Mobile Sidebar -->
     <script>
         const menuBtn = document.getElementById('menu-btn');
         const closeMenuBtn = document.getElementById('close-menu-btn');

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>lustreco® | Shop</title>
+    <title>lustreco® | My Account</title>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -17,7 +17,7 @@
         body { font-family: 'Inter', sans-serif; }
     </style>
 </head>
-<body class="bg-white text-gray-900 antialiased flex flex-col min-h-screen">
+<body class="bg-gray-100 text-gray-900 antialiased flex flex-col min-h-screen">
 
     <!-- Navbar Minimalis -->
     <header id="main-header" class="sticky w-full top-0 z-40 bg-white border-b border-gray-100 px-8 py-5">
@@ -120,7 +120,7 @@
         </div>
     </header>
 
-    <!-- JS for Mobile Sidebar -->
+    <!-- Mobile Sidebar -->
     <div id="mobile-sidebar" class="fixed inset-y-0 left-0 w-80 bg-white z-50 transform -translate-x-full transition-transform duration-300 ease-in-out border-r border-gray-200">
         <div class="p-6 flex flex-col h-full mt-2">
             <div class="flex items-center justify-between mb-6 px-1">
@@ -134,7 +134,7 @@
             
             <nav class="flex flex-col space-y-1 flex-grow">
                 <a href="{{ url('/products') }}" class="text-[14px] font-medium tracking-wide text-gray-900 hover:bg-[#d1d1d1] transition-colors px-4 py-3 rounded-lg block">SHOP</a>
-                <a href="{{ url('/about') }}" class="text-[14px] font-medium tracking-wide text-gray-900 hover:bg-[#d1d1d1] transition-colors px-4 py-3 rounded-lg block">ABOUT</a>
+                <a href="#" class="text-[14px] font-medium tracking-wide text-gray-900 hover:bg-[#d1d1d1] transition-colors px-4 py-3 rounded-lg block">ABOUT</a>
                 <a href="#" class="text-[14px] font-medium tracking-wide text-gray-900 hover:bg-[#d1d1d1] transition-colors px-4 py-3 rounded-lg block">STORE</a>
             </nav>
         </div>
@@ -144,129 +144,52 @@
     <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-30 z-40 hidden transition-opacity duration-300"></div>
 
     <!-- Main Content -->
-    <main class="flex-grow w-full max-w-[1400px] mx-auto px-6 py-10 flex flex-col md:flex-row gap-12">
+    <main class="flex-grow w-full max-w-[1000px] mx-auto px-4 sm:px-6 py-10">
+        <h1 class="text-xl font-semibold mb-6">My Account</h1>
         
-        <!-- Left Sidebar (Filters) -->
-        <aside class="w-full md:w-56 flex-shrink-0 hidden md:block">
-            <!-- Search -->
-            <form action="{{ url('/products') }}" method="GET" class="mb-8 relative">
-                <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search" class="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-md text-sm focus:outline-none focus:border-gray-400 transition">
-            </form>
-
-            <!-- Categories -->
-            <div class="mb-8 border-b border-gray-100 pb-6">
-                <div class="flex justify-between items-center mb-5 cursor-pointer">
-                    <h3 class="font-medium text-sm text-gray-900">Categories</h3>
-                    <i class="fa-solid fa-chevron-up text-xs text-gray-500"></i>
-                </div>
-                <div class="space-y-4">
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="checkbox" class="form-checkbox h-4 w-4 text-black border-gray-300 rounded-[3px] focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">Tees</span>
-                    </label>
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="checkbox" class="form-checkbox h-4 w-4 text-black border-gray-300 rounded-[3px] focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">Shirts</span>
-                    </label>
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="checkbox" class="form-checkbox h-4 w-4 text-black border-gray-300 rounded-[3px] focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">Outerwear</span>
-                    </label>
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="checkbox" class="form-checkbox h-4 w-4 text-black border-gray-300 rounded-[3px] focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">Sweaters</span>
-                    </label>
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="checkbox" class="form-checkbox h-4 w-4 text-black border-gray-300 rounded-[3px] focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">Pants</span>
-                    </label>
-                    <button class="text-[13px] text-gray-900 font-medium mt-3 flex items-center hover:text-gray-600 transition">
-                        See More <i class="fa-solid fa-chevron-down text-[9px] ml-1.5"></i>
-                    </button>
-                </div>
+        @guest
+        <!-- Promotional Banner -->
+        <div class="bg-white rounded-[8px] shadow-sm border border-gray-100 p-6 flex flex-col md:flex-row items-center justify-between mb-8">
+            <div class="mb-4 md:mb-0">
+                <h2 class="text-[15px] font-medium text-gray-900 mb-2">Enjoy Special Discounts and Stay Connected</h2>
+                <p class="text-[13px] text-gray-500 max-w-3xl leading-relaxed">
+                    Get access to exclusive discounts while keeping track of your orders and chats with ease. Stay updated on your purchases and engage with us seamlessly, all in one place.
+                </p>
             </div>
-
-            <!-- Product Type -->
-            <div class="mb-8 border-b border-gray-100 pb-6">
-                <div class="flex justify-between items-center mb-5 cursor-pointer">
-                    <h3 class="font-medium text-sm text-gray-900">Product Type</h3>
-                    <i class="fa-solid fa-chevron-up text-xs text-gray-500"></i>
-                </div>
-                <div class="space-y-4">
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="radio" name="product_type" checked class="form-radio h-4 w-4 text-black border-gray-300 focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">All Products</span>
-                    </label>
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="radio" name="product_type" class="form-radio h-4 w-4 text-black border-gray-300 focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">Discount</span>
-                    </label>
-                </div>
+            <div class="flex space-x-3 shrink-0 ml-0 md:ml-6 w-full md:w-auto">
+                <a href="{{ route('login') }}" class="flex-1 md:flex-none text-center px-6 py-2 border border-gray-300 rounded-[20px] text-sm font-medium hover:bg-gray-50 transition">Login</a>
+                <a href="{{ route('register') }}" class="flex-1 md:flex-none text-center px-6 py-2 bg-black text-white rounded-[20px] text-sm font-medium hover:bg-gray-800 transition">Signup</a>
             </div>
+        </div>
+        @endguest
 
-            <!-- Availability -->
-            <div class="mb-8 border-b border-gray-100 pb-6">
-                <div class="flex justify-between items-center mb-5 cursor-pointer">
-                    <h3 class="font-medium text-sm text-gray-900">Availability</h3>
-                    <i class="fa-solid fa-chevron-up text-xs text-gray-500"></i>
-                </div>
-                <div class="space-y-4">
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="radio" name="availability" checked class="form-radio h-4 w-4 text-black border-gray-300 focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">All</span>
-                    </label>
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="radio" name="availability" class="form-radio h-4 w-4 text-black border-gray-300 focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">In Stock</span>
-                    </label>
-                </div>
+        <!-- Tabs & Content -->
+        <div class="bg-white rounded-[8px] shadow-sm border border-gray-100 overflow-hidden">
+            <!-- Tabs -->
+            <div class="flex border-b border-gray-200">
+                <button class="flex-1 py-4 text-sm font-medium text-black border-b-2 border-black text-center">Orders</button>
+                <button class="flex-1 py-4 text-sm font-medium text-gray-500 hover:text-black hover:bg-gray-50 transition text-center">Wishlist</button>
             </div>
             
-            <!-- Price -->
-            <div class="mb-6">
-                <div class="flex justify-between items-center cursor-pointer">
-                    <h3 class="font-medium text-sm text-gray-900">Price</h3>
-                    <i class="fa-solid fa-chevron-up text-xs text-gray-500"></i>
+            <!-- Content -->
+            <div class="p-6 min-h-[400px] flex flex-col">
+                <div class="flex justify-between items-center mb-16">
+                    <h3 class="text-[15px] font-medium">My Orders (0)</h3>
+                    <div class="relative">
+                        <select class="appearance-none border border-gray-200 rounded-md text-[13px] px-4 py-2 pr-8 focus:outline-none focus:border-gray-400 bg-white cursor-pointer min-w-[120px]">
+                            <option>All status</option>
+                        </select>
+                        <i class="fa-solid fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-[10px] text-gray-500 pointer-events-none"></i>
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div class="flex-grow flex flex-col items-center justify-center text-center pb-10">
+                    <i class="fa-solid fa-box-open text-5xl text-gray-300 mb-4 font-light"></i>
+                    <h4 class="text-[15px] font-medium text-gray-900 mb-1.5">No Orders Found</h4>
+                    <p class="text-[13px] text-gray-500">Place an order to see it listed here.</p>
                 </div>
             </div>
-        </aside>
-
-        <!-- Right Content (Product Grid) -->
-        <div class="flex-grow">
-            <!-- Top bar -->
-            <div class="flex justify-between items-center mb-10">
-                <h1 class="text-[17px] font-medium text-gray-900 tracking-wide">All Products</h1>
-                <div class="flex items-center space-x-1.5 border border-gray-200 rounded text-gray-700 px-3 py-1.5 cursor-pointer hover:border-gray-300 transition">
-                    <span class="text-[11px] text-gray-500">sort :</span>
-                    <span class="text-[11px] font-medium">Recent</span>
-                    <i class="fa-solid fa-chevron-down text-[9px] ml-1"></i>
-                </div>
-            </div>
-
-            <!-- Grid -->
-            @if($products->isEmpty())
-                <div class="py-16 text-center text-gray-500 border border-dashed border-gray-200 rounded-lg">
-                    <p>Belum ada produk yang tersedia saat ini.</p>
-                </div>
-            @else
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
-                    @foreach($products as $product)
-                        <a href="{{ url('/products/' . $product->id) }}" class="group cursor-pointer block">
-                            <!-- Image Container -->
-                            <div class="relative w-full aspect-square mb-4 bg-gray-50 overflow-hidden rounded-[2px]">
-                                <img src="{{ $product->image ?? 'https://via.placeholder.com/600' }}" alt="{{ $product->name }}" class="w-full h-full object-cover object-center group-hover:scale-[1.02] transition duration-500 ease-out">
-                            </div>
-                            <!-- Details -->
-                            <div class="text-left px-1">
-                                <h3 class="text-[13px] text-gray-900 leading-snug mb-1 font-medium group-hover:underline underline-offset-4 decoration-gray-300">{{ $product->name }}</h3>
-                                <p class="text-[12px] text-gray-500 mb-1.5">Lustreco</p>
-                                <p class="text-[13px] font-medium text-gray-900">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
-                            </div>
-                        </a>
-                    @endforeach
-                </div>
-            @endif
         </div>
     </main>
 
@@ -284,7 +207,7 @@
             if (isClosed) {
                 sidebar.classList.remove('-translate-x-full');
                 overlay.classList.remove('hidden');
-                document.body.style.overflow = 'hidden'; // Prevent scrolling
+                document.body.style.overflow = 'hidden'; 
             } else {
                 sidebar.classList.add('-translate-x-full');
                 overlay.classList.add('hidden');
@@ -296,7 +219,6 @@
         if(closeMenuBtn) closeMenuBtn.addEventListener('click', toggleMenu);
         if(overlay) overlay.addEventListener('click', toggleMenu);
 
-        // Currency Popover Toggle
         if(currencyBtn) {
             currencyBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -304,7 +226,6 @@
             });
         }
 
-        // Close Popover when clicking outside
         document.addEventListener('click', (e) => {
             if (currencyPopover && !currencyPopover.classList.contains('hidden') && !currencyPopover.contains(e.target) && e.target !== currencyBtn) {
                 currencyPopover.classList.add('hidden');
@@ -321,7 +242,6 @@
             });
         }
 
-        // Sync Dropdowns with UI
         const deliverSelect = document.getElementById('deliver-select');
         const deliverText = document.getElementById('deliver-text');
         const deliverFlag = document.getElementById('deliver-flag');

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>lustreco® | Shop</title>
+    <title>lustreco® | {{ $product->name }}</title>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -144,133 +144,77 @@
     <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-30 z-40 hidden transition-opacity duration-300"></div>
 
     <!-- Main Content -->
-    <main class="flex-grow w-full max-w-[1400px] mx-auto px-6 py-10 flex flex-col md:flex-row gap-12">
-        
-        <!-- Left Sidebar (Filters) -->
-        <aside class="w-full md:w-56 flex-shrink-0 hidden md:block">
-            <!-- Search -->
-            <form action="{{ url('/products') }}" method="GET" class="mb-8 relative">
-                <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search" class="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-md text-sm focus:outline-none focus:border-gray-400 transition">
-            </form>
-
-            <!-- Categories -->
-            <div class="mb-8 border-b border-gray-100 pb-6">
-                <div class="flex justify-between items-center mb-5 cursor-pointer">
-                    <h3 class="font-medium text-sm text-gray-900">Categories</h3>
-                    <i class="fa-solid fa-chevron-up text-xs text-gray-500"></i>
+    <main class="flex-grow w-full max-w-[1200px] mx-auto px-4 sm:px-6 py-12 flex flex-col lg:flex-row gap-12">
+        <!-- Left: Images -->
+        <div class="w-full lg:w-3/5 flex flex-col">
+            <div class="w-full bg-white border border-gray-100 rounded-sm mb-4 flex items-center justify-center p-8 aspect-square lg:aspect-[4/3]">
+                <img src="{{ $product->image }}" alt="{{ $product->name }}" class="object-contain w-full h-full max-h-[600px]">
+            </div>
+            <div class="flex space-x-4">
+                <div class="w-24 h-24 border-2 border-black rounded-sm flex items-center justify-center p-2 cursor-pointer">
+                    <img src="{{ $product->image }}" alt="Thumbnail 1" class="object-contain w-full h-full">
                 </div>
-                <div class="space-y-4">
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="checkbox" class="form-checkbox h-4 w-4 text-black border-gray-300 rounded-[3px] focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">Tees</span>
-                    </label>
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="checkbox" class="form-checkbox h-4 w-4 text-black border-gray-300 rounded-[3px] focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">Shirts</span>
-                    </label>
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="checkbox" class="form-checkbox h-4 w-4 text-black border-gray-300 rounded-[3px] focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">Outerwear</span>
-                    </label>
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="checkbox" class="form-checkbox h-4 w-4 text-black border-gray-300 rounded-[3px] focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">Sweaters</span>
-                    </label>
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="checkbox" class="form-checkbox h-4 w-4 text-black border-gray-300 rounded-[3px] focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">Pants</span>
-                    </label>
-                    <button class="text-[13px] text-gray-900 font-medium mt-3 flex items-center hover:text-gray-600 transition">
-                        See More <i class="fa-solid fa-chevron-down text-[9px] ml-1.5"></i>
+                <div class="w-24 h-24 border border-gray-200 rounded-sm flex items-center justify-center p-2 cursor-pointer opacity-70 hover:opacity-100 transition">
+                    <img src="{{ $product->image }}" alt="Thumbnail 2" class="object-contain w-full h-full">
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Details -->
+        <div class="w-full lg:w-2/5 flex flex-col">
+            <div class="mb-4">
+                <span class="inline-block bg-black text-white text-[11px] font-bold px-2 py-1 mb-4">In Stock</span>
+                <h1 class="text-[24px] text-gray-900 leading-tight mb-4 pr-8">{{ $product->name }}</h1>
+                <div class="flex items-center justify-between mb-8">
+                    <span class="text-[15px] font-medium text-gray-900">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
+                    <button class="text-gray-400 hover:text-red-500 transition focus:outline-none">
+                        <i class="fa-regular fa-heart text-xl"></i>
                     </button>
                 </div>
             </div>
 
-            <!-- Product Type -->
-            <div class="mb-8 border-b border-gray-100 pb-6">
-                <div class="flex justify-between items-center mb-5 cursor-pointer">
-                    <h3 class="font-medium text-sm text-gray-900">Product Type</h3>
-                    <i class="fa-solid fa-chevron-up text-xs text-gray-500"></i>
+            <div class="mb-8">
+                <label class="block text-[14px] text-gray-900 mb-3">Size</label>
+                <div class="flex flex-wrap gap-3" id="size-selector">
+                    <button type="button" class="size-btn px-5 py-2 border border-gray-200 text-sm hover:border-black transition focus:outline-none" data-size="S">S</button>
+                    <button type="button" class="size-btn px-5 py-2 border border-gray-200 text-sm hover:border-black transition focus:outline-none" data-size="M">M</button>
+                    <button type="button" class="size-btn px-5 py-2 border border-gray-200 text-sm hover:border-black transition focus:outline-none" data-size="L">L</button>
+                    <button type="button" class="size-btn px-5 py-2 border border-gray-200 text-sm hover:border-black transition focus:outline-none" data-size="XL">XL</button>
                 </div>
-                <div class="space-y-4">
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="radio" name="product_type" checked class="form-radio h-4 w-4 text-black border-gray-300 focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">All Products</span>
-                    </label>
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="radio" name="product_type" class="form-radio h-4 w-4 text-black border-gray-300 focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">Discount</span>
-                    </label>
-                </div>
+                <p id="size-warning" class="text-red-500 text-[12px] mt-2 hidden">Please select a size first.</p>
             </div>
 
-            <!-- Availability -->
-            <div class="mb-8 border-b border-gray-100 pb-6">
-                <div class="flex justify-between items-center mb-5 cursor-pointer">
-                    <h3 class="font-medium text-sm text-gray-900">Availability</h3>
-                    <i class="fa-solid fa-chevron-up text-xs text-gray-500"></i>
-                </div>
-                <div class="space-y-4">
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="radio" name="availability" checked class="form-radio h-4 w-4 text-black border-gray-300 focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">All</span>
-                    </label>
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="radio" name="availability" class="form-radio h-4 w-4 text-black border-gray-300 focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">In Stock</span>
-                    </label>
-                </div>
+            <div class="flex items-center space-x-0 border border-gray-200 w-fit mb-8 rounded-sm">
+                <button type="button" class="px-4 py-2 text-gray-600 hover:text-black transition focus:outline-none" onclick="document.getElementById('qty').value = Math.max(1, parseInt(document.getElementById('qty').value) - 1)">
+                    <i class="fa-solid fa-minus text-[11px]"></i>
+                </button>
+                <input id="qty" type="text" value="1" class="w-12 text-center text-sm font-medium py-2 outline-none border-x border-gray-200" readonly>
+                <button type="button" class="px-4 py-2 text-gray-600 hover:text-black transition focus:outline-none" onclick="document.getElementById('qty').value = parseInt(document.getElementById('qty').value) + 1">
+                    <i class="fa-solid fa-plus text-[11px]"></i>
+                </button>
             </div>
-            
-            <!-- Price -->
+
+            <div class="flex flex-col space-y-3 mb-10">
+                <button type="button" id="add-to-cart-btn" data-url="{{ url('/cart') }}" class="w-full border border-black bg-white text-black text-center py-3.5 font-medium text-sm hover:bg-gray-50 transition rounded-xl">
+                    Add to Cart
+                </button>
+                <button type="button" id="buy-it-now-btn" data-url="{{ url('/checkout') }}" class="w-full bg-black text-white text-center py-3.5 font-medium text-sm hover:bg-gray-800 transition rounded-xl">
+                    Buy It Now
+                </button>
+            </div>
+
             <div class="mb-6">
-                <div class="flex justify-between items-center cursor-pointer">
-                    <h3 class="font-medium text-sm text-gray-900">Price</h3>
-                    <i class="fa-solid fa-chevron-up text-xs text-gray-500"></i>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Right Content (Product Grid) -->
-        <div class="flex-grow">
-            <!-- Top bar -->
-            <div class="flex justify-between items-center mb-10">
-                <h1 class="text-[17px] font-medium text-gray-900 tracking-wide">All Products</h1>
-                <div class="flex items-center space-x-1.5 border border-gray-200 rounded text-gray-700 px-3 py-1.5 cursor-pointer hover:border-gray-300 transition">
-                    <span class="text-[11px] text-gray-500">sort :</span>
-                    <span class="text-[11px] font-medium">Recent</span>
-                    <i class="fa-solid fa-chevron-down text-[9px] ml-1"></i>
-                </div>
+                <h3 class="text-[13px] font-bold text-black uppercase mb-3">Detail Product:</h3>
+                <p class="text-[14px] text-gray-600 leading-relaxed">{{ $product->description }}</p>
             </div>
 
-            <!-- Grid -->
-            @if($products->isEmpty())
-                <div class="py-16 text-center text-gray-500 border border-dashed border-gray-200 rounded-lg">
-                    <p>Belum ada produk yang tersedia saat ini.</p>
-                </div>
-            @else
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
-                    @foreach($products as $product)
-                        <a href="{{ url('/products/' . $product->id) }}" class="group cursor-pointer block">
-                            <!-- Image Container -->
-                            <div class="relative w-full aspect-square mb-4 bg-gray-50 overflow-hidden rounded-[2px]">
-                                <img src="{{ $product->image ?? 'https://via.placeholder.com/600' }}" alt="{{ $product->name }}" class="w-full h-full object-cover object-center group-hover:scale-[1.02] transition duration-500 ease-out">
-                            </div>
-                            <!-- Details -->
-                            <div class="text-left px-1">
-                                <h3 class="text-[13px] text-gray-900 leading-snug mb-1 font-medium group-hover:underline underline-offset-4 decoration-gray-300">{{ $product->name }}</h3>
-                                <p class="text-[12px] text-gray-500 mb-1.5">Lustreco</p>
-                                <p class="text-[13px] font-medium text-gray-900">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
-                            </div>
-                        </a>
-                    @endforeach
-                </div>
-            @endif
+            <div>
+                <h3 class="text-[13px] font-bold text-black uppercase mb-3">Material/Category:</h3>
+                <p class="text-[14px] text-gray-600 capitalize">{{ $product->category }}</p>
+            </div>
         </div>
     </main>
 
-    <!-- JS for Mobile Sidebar -->
     <script>
         const menuBtn = document.getElementById('menu-btn');
         const closeMenuBtn = document.getElementById('close-menu-btn');
@@ -284,7 +228,7 @@
             if (isClosed) {
                 sidebar.classList.remove('-translate-x-full');
                 overlay.classList.remove('hidden');
-                document.body.style.overflow = 'hidden'; // Prevent scrolling
+                document.body.style.overflow = 'hidden'; 
             } else {
                 sidebar.classList.add('-translate-x-full');
                 overlay.classList.add('hidden');
@@ -296,7 +240,6 @@
         if(closeMenuBtn) closeMenuBtn.addEventListener('click', toggleMenu);
         if(overlay) overlay.addEventListener('click', toggleMenu);
 
-        // Currency Popover Toggle
         if(currencyBtn) {
             currencyBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -304,7 +247,6 @@
             });
         }
 
-        // Close Popover when clicking outside
         document.addEventListener('click', (e) => {
             if (currencyPopover && !currencyPopover.classList.contains('hidden') && !currencyPopover.contains(e.target) && e.target !== currencyBtn) {
                 currencyPopover.classList.add('hidden');
@@ -321,7 +263,6 @@
             });
         }
 
-        // Sync Dropdowns with UI
         const deliverSelect = document.getElementById('deliver-select');
         const deliverText = document.getElementById('deliver-text');
         const deliverFlag = document.getElementById('deliver-flag');
@@ -348,6 +289,58 @@
         if (currencySelect) {
             currencySelect.addEventListener('change', function() {
                 currencyText.textContent = this.value;
+            });
+        }
+        
+        // --- Size Selection & Validation ---
+        let selectedSize = null;
+        const sizeBtns = document.querySelectorAll('.size-btn');
+        const sizeWarning = document.getElementById('size-warning');
+        
+        sizeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Reset all buttons
+                sizeBtns.forEach(b => {
+                    b.classList.remove('border-black', 'ring-1', 'ring-black');
+                    b.classList.add('border-gray-200');
+                });
+                // Highlight selected
+                btn.classList.remove('border-gray-200');
+                btn.classList.add('border-black', 'ring-1', 'ring-black');
+                
+                selectedSize = btn.getAttribute('data-size');
+                
+                // Hide warning if shown
+                sizeWarning.classList.add('hidden');
+            });
+        });
+
+        function handlePurchaseAction(e, targetUrl) {
+            if (!selectedSize) {
+                e.preventDefault();
+                sizeWarning.classList.remove('hidden');
+                
+                // Optional: Flash all size buttons to draw attention
+                sizeBtns.forEach(b => {
+                    b.classList.add('border-red-500');
+                    setTimeout(() => b.classList.remove('border-red-500'), 500);
+                });
+            } else {
+                window.location.href = targetUrl;
+            }
+        }
+
+        const addToCartBtn = document.getElementById('add-to-cart-btn');
+        if (addToCartBtn) {
+            addToCartBtn.addEventListener('click', function(e) {
+                handlePurchaseAction(e, this.getAttribute('data-url'));
+            });
+        }
+
+        const buyItNowBtn = document.getElementById('buy-it-now-btn');
+        if (buyItNowBtn) {
+            buyItNowBtn.addEventListener('click', function(e) {
+                handlePurchaseAction(e, this.getAttribute('data-url'));
             });
         }
     </script>
