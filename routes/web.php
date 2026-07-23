@@ -3,34 +3,21 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CartController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
 
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{id}', [ProductController::class, 'show']);   
 Route::get('/account', function () {
-    return view('account');
+    return redirect('/profile');
 });
 Route::get('/about', function () {
     return view('about');
 });
-Route::get('/cart', function () {
-    $response = Illuminate\Support\Facades\Http::get("https://fakestoreapi.com/products");
-    $products = collect();
-    if ($response->successful()) {
-        foreach(array_slice($response->json(), 0, 5) as $apiProduct) {
-            $product = new \stdClass();
-            $product->name = $apiProduct['title'];
-            $product->price = $apiProduct['price'] * 15000;
-            // Cart blade currently uses a default placeholder via UI avatars but we can pass image just in case
-            $product->image = $apiProduct['image'];
-            $products->push($product);
-        }
-    }
-    return view('cart', compact('products'));
-});
+
 Route::get('/checkout', function () {
     return view('checkout');
 });
@@ -53,9 +40,16 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Cart — protected so only logged-in users can use it
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+    Route::patch('/cart/{key}', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/{key}', [CartController::class, 'remove'])->name('cart.remove');
 });
 
 require __DIR__.'/auth.php';

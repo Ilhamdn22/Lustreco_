@@ -167,8 +167,7 @@
         <div class="bg-white rounded-[8px] shadow-sm border border-gray-100 overflow-hidden">
             <!-- Tabs -->
             <div class="flex border-b border-gray-200">
-                <button class="flex-1 py-4 text-sm font-medium text-black border-b-2 border-black text-center">Orders</button>
-                <button class="flex-1 py-4 text-sm font-medium text-gray-500 hover:text-black hover:bg-gray-50 transition text-center">Wishlist</button>
+                <button class="w-full py-4 text-sm font-medium text-black border-b-2 border-black text-center">Orders</button>
             </div>
             
             <!-- Content -->

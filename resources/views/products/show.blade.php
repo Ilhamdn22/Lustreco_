@@ -195,10 +195,19 @@
             </div>
 
             <div class="flex flex-col space-y-3 mb-10">
-                <button type="button" id="add-to-cart-btn" data-url="{{ url('/cart') }}" class="w-full border border-black bg-white text-black text-center py-3.5 font-medium text-sm hover:bg-gray-50 transition rounded-xl">
-                    Add to Cart
-                </button>
-                <button type="button" id="buy-it-now-btn" data-url="{{ url('/checkout') }}" class="w-full bg-black text-white text-center py-3.5 font-medium text-sm hover:bg-gray-800 transition rounded-xl">
+                <form id="cart-form" method="POST" action="{{ route('cart.add') }}">
+                    @csrf
+                    <input type="hidden" name="id" value="{{ $product->id }}">
+                    <input type="hidden" name="name" value="{{ $product->name }}">
+                    <input type="hidden" name="price" value="{{ $product->price }}">
+                    <input type="hidden" name="image" value="{{ $product->image }}">
+                    <input type="hidden" name="size" id="selected-size" value="">
+                    <input type="hidden" name="quantity" id="form-qty" value="1">
+                    <button type="submit" id="add-to-cart-btn" class="w-full border border-black bg-white text-black text-center py-3.5 font-medium text-sm hover:bg-gray-50 transition rounded-xl">
+                        Add to Cart
+                    </button>
+                </form>
+                <button type="button" id="buy-it-now-btn" class="w-full bg-black text-white text-center py-3.5 font-medium text-sm hover:bg-gray-800 transition rounded-xl">
                     Buy It Now
                 </button>
             </div>
@@ -296,51 +305,53 @@
         let selectedSize = null;
         const sizeBtns = document.querySelectorAll('.size-btn');
         const sizeWarning = document.getElementById('size-warning');
+        const selectedSizeInput = document.getElementById('selected-size');
+        const formQtyInput = document.getElementById('form-qty');
+        const qtyInput = document.getElementById('qty');
         
         sizeBtns.forEach(btn => {
             btn.addEventListener('click', () => {
-                // Reset all buttons
                 sizeBtns.forEach(b => {
                     b.classList.remove('border-black', 'ring-1', 'ring-black');
                     b.classList.add('border-gray-200');
                 });
-                // Highlight selected
                 btn.classList.remove('border-gray-200');
                 btn.classList.add('border-black', 'ring-1', 'ring-black');
-                
                 selectedSize = btn.getAttribute('data-size');
-                
-                // Hide warning if shown
+                if (selectedSizeInput) selectedSizeInput.value = selectedSize;
                 sizeWarning.classList.add('hidden');
             });
         });
 
-        function handlePurchaseAction(e, targetUrl) {
-            if (!selectedSize) {
-                e.preventDefault();
-                sizeWarning.classList.remove('hidden');
-                
-                // Optional: Flash all size buttons to draw attention
-                sizeBtns.forEach(b => {
-                    b.classList.add('border-red-500');
-                    setTimeout(() => b.classList.remove('border-red-500'), 500);
-                });
-            } else {
-                window.location.href = targetUrl;
-            }
-        }
-
-        const addToCartBtn = document.getElementById('add-to-cart-btn');
-        if (addToCartBtn) {
-            addToCartBtn.addEventListener('click', function(e) {
-                handlePurchaseAction(e, this.getAttribute('data-url'));
+        const cartForm = document.getElementById('cart-form');
+        if (cartForm) {
+            cartForm.addEventListener('submit', function(e) {
+                if (!selectedSize) {
+                    e.preventDefault();
+                    sizeWarning.classList.remove('hidden');
+                    sizeBtns.forEach(b => {
+                        b.classList.add('border-red-500');
+                        setTimeout(() => b.classList.remove('border-red-500'), 500);
+                    });
+                } else {
+                    // Sync qty before submit
+                    if (formQtyInput && qtyInput) formQtyInput.value = qtyInput.value;
+                }
             });
         }
 
         const buyItNowBtn = document.getElementById('buy-it-now-btn');
         if (buyItNowBtn) {
-            buyItNowBtn.addEventListener('click', function(e) {
-                handlePurchaseAction(e, this.getAttribute('data-url'));
+            buyItNowBtn.addEventListener('click', function() {
+                if (!selectedSize) {
+                    sizeWarning.classList.remove('hidden');
+                    sizeBtns.forEach(b => {
+                        b.classList.add('border-red-500');
+                        setTimeout(() => b.classList.remove('border-red-500'), 500);
+                    });
+                } else {
+                    window.location.href = '{{ url("/checkout") }}';
+                }
             });
         }
     </script>

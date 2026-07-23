@@ -146,45 +146,71 @@
 
     <main class="flex-grow w-full max-w-[1000px] mx-auto px-4 sm:px-6 py-12 flex flex-col items-center">
         <!-- Cart Title -->
-        <h1 class="text-[22px] font-bold mb-14">Cart</h1>
+        <h1 class="text-[22px] font-bold mb-14 self-start">Cart</h1>
 
-        <!-- Cart Items (Simulated) -->
+        @if(session('success'))
+        <div class="w-full mb-6 px-4 py-3 bg-green-50 border border-green-200 text-green-700 text-sm rounded-xl flex items-center gap-2">
+            <i class="fa-solid fa-check-circle"></i> {{ session('success') }}
+        </div>
+        @endif
+
+        <!-- Cart Items -->
         <div class="w-full mb-16">
-            <div class="flex items-center justify-between border-b border-gray-100 pb-6 mb-6">
-                <div class="flex items-center space-x-6">
-                    <div class="w-24 h-32 bg-gray-100 rounded-md overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=400&auto=format&fit=crop" class="w-full h-full object-cover">
-                    </div>
-                    <div>
-                        <h2 class="text-[15px] font-medium mb-1">Lustreco Basic Tee</h2>
-                        <p class="text-[13px] text-gray-500 mb-3">Color: Black | Size: M</p>
-                        <div class="flex items-center space-x-3">
-                            <span class="text-sm font-medium">IDR 199.000</span>
+            @if(empty($cart))
+                <div class="flex flex-col items-center justify-center py-24 text-center">
+                    <i class="fa-solid fa-bag-shopping text-5xl text-gray-200 mb-6"></i>
+                    <h2 class="text-xl font-semibold text-gray-400 mb-2">Your cart is empty</h2>
+                    <p class="text-sm text-gray-400 mb-8">Looks like you haven't added anything yet.</p>
+                    <a href="{{ url('/products') }}" class="px-8 py-3.5 bg-black text-white rounded-xl text-sm font-medium hover:bg-gray-800 transition">Shop Now</a>
+                </div>
+            @else
+                @foreach($cart as $key => $item)
+                <div class="flex items-center justify-between border-b border-gray-100 pb-6 mb-6">
+                    <div class="flex items-center space-x-6">
+                        <div class="w-24 h-32 bg-gray-100 rounded-md overflow-hidden flex-shrink-0">
+                            <img src="{{ $item['image'] }}" alt="{{ $item['name'] }}" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h2 class="text-[15px] font-medium mb-1">{{ $item['name'] }}</h2>
+                            <p class="text-[13px] text-gray-500 mb-3">Size: {{ $item['size'] }}</p>
+                            <span class="text-sm font-medium">Rp {{ number_format($item['price'], 0, ',', '.') }}</span>
                         </div>
                     </div>
-                </div>
-                <div class="flex flex-col items-end space-y-4">
-                    <button class="text-gray-400 hover:text-black transition"><i class="fa-solid fa-trash text-sm"></i></button>
-                    <div class="flex items-center border border-gray-200 rounded-lg overflow-hidden">
-                        <button class="px-3 py-1 hover:bg-gray-50">-</button>
-                        <span class="px-3 text-sm">1</span>
-                        <button class="px-3 py-1 hover:bg-gray-50">+</button>
+                    <div class="flex flex-col items-end space-y-4">
+                        <!-- Remove button -->
+                        <form method="POST" action="{{ route('cart.remove', $key) }}">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="text-gray-400 hover:text-red-500 transition">
+                                <i class="fa-solid fa-trash text-sm"></i>
+                            </button>
+                        </form>
+                        <!-- Quantity update -->
+                        <form method="POST" action="{{ route('cart.update', $key) }}" class="flex items-center border border-gray-200 rounded-lg overflow-hidden">
+                            @csrf
+                            @method('PATCH')
+                            <button type="submit" name="quantity" value="{{ max(1, $item['quantity'] - 1) }}" class="px-3 py-1.5 hover:bg-gray-50 text-sm font-medium">−</button>
+                            <span class="px-3 text-sm font-medium">{{ $item['quantity'] }}</span>
+                            <button type="submit" name="quantity" value="{{ $item['quantity'] + 1 }}" class="px-3 py-1.5 hover:bg-gray-50 text-sm font-medium">+</button>
+                        </form>
                     </div>
                 </div>
-            </div>
+                @endforeach
 
-            <!-- Cart Summary & Checkout -->
-            <div class="flex flex-col items-end w-full mt-8">
-                <div class="w-full max-w-sm">
-                    <div class="flex justify-between items-center mb-6">
-                        <span class="text-[15px] font-medium">Subtotal</span>
-                        <span class="text-[18px] font-bold">IDR 199.000</span>
+                <!-- Cart Summary & Checkout -->
+                <div class="flex flex-col items-end w-full mt-8">
+                    <div class="w-full max-w-sm">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-[15px] font-medium">Subtotal</span>
+                            <span class="text-[18px] font-bold">Rp {{ number_format($subtotal, 0, ',', '.') }}</span>
+                        </div>
+                        <p class="text-[13px] text-gray-500 mb-6 text-right">Shipping & taxes calculated at checkout.</p>
+                        <a href="{{ url('/checkout') }}" class="w-full block text-center px-8 py-4 bg-black text-white rounded-[12px] text-sm font-bold hover:bg-gray-800 transition">Proceed to Checkout</a>
                     </div>
-                    <p class="text-[13px] text-gray-500 mb-6 text-right">Shipping & taxes calculated at checkout.</p>
-                    <a href="{{ url('/checkout') }}" class="w-full block text-center px-8 py-4 bg-black text-white rounded-[12px] text-sm font-bold hover:bg-gray-800 transition">Proceed to Checkout</a>
                 </div>
-            </div>
+            @endif
         </div>
+
 
         <!-- Recently Ordered -->
         <div class="w-full">
