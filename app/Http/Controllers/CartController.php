@@ -3,99 +3,121 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class CartController extends Controller
 {
     /**
-     * Display the cart page.
+     * Tampilkan isi keranjang.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $cart = session()->get('cart', []);
-        $subtotal = array_sum(array_map(fn($item) => $item['price'] * $item['quantity'], $cart));
+        $cart = session('cart', []);
 
-        // Fetch products for "Recently Ordered" section
+        $subtotal = collect($cart)->sum(fn ($item) => $item['price'] * $item['quantity']);
+
+        // Rekomendasi produk untuk carousel "Recently Ordered"
         $products = collect();
+
         try {
-            $response = \Illuminate\Support\Facades\Http::timeout(5)->get('https://fakestoreapi.com/products');
+            $response = Http::withoutVerifying()->get('https://fakestoreapi.com/products?limit=8');
+
             if ($response->successful()) {
-                foreach (array_slice($response->json(), 0, 5) as $apiProduct) {
+                $products = collect($response->json())->map(function ($apiProduct) {
                     $product = new \stdClass();
-                    $product->name  = $apiProduct['title'];
-                    $product->price = $apiProduct['price'] * 15000;
+                    $product->id = $apiProduct['id'];
+                    $product->name = $apiProduct['title'];
+                    $product->price = (int) round($apiProduct['price'] * 15000);
                     $product->image = $apiProduct['image'];
-                    $products->push($product);
-                }
+
+                    return $product;
+                });
             }
-        } catch (\Exception $e) {
-            // If API fails, just show empty recently ordered
+        } catch (\Throwable $e) {
+            // Kalau API sedang down, carousel cukup dikosongkan, tidak perlu error ke user
         }
 
-        return view('cart', compact('cart', 'subtotal', 'products'));
+        return view('cart', [
+            'cart' => $cart,
+            'subtotal' => $subtotal,
+            'products' => $products,
+        ]);
     }
 
     /**
-     * Add a product to the cart.
+     * Tambahkan produk ke keranjang.
+     * product_id, quantity, & size dikirim lewat body request.
      */
     public function add(Request $request)
     {
-        $request->validate([
-            'id'       => 'required',
-            'name'     => 'required|string',
-            'price'    => 'required|numeric',
-            'image'    => 'nullable|string',
-            'size'     => 'required|string',
-            'quantity' => 'required|integer|min:1',
+        $validated = $request->validate([
+            'product_id' => 'required|integer',
+            'quantity' => 'nullable|integer|min:1',
+            'size' => 'nullable|string|max:20',
         ]);
 
-        $cart = session()->get('cart', []);
+        $id = $validated['product_id'];
+        $quantity = max(1, (int) ($validated['quantity'] ?? 1));
+        $size = $validated['size'] ?? 'One Size';
 
-        // Unique key: product id + size
-        $key = $request->id . '_' . $request->size;
+        $response = Http::withoutVerifying()->get("https://fakestoreapi.com/products/{$id}");
 
-        if (isset($cart[$key])) {
-            $cart[$key]['quantity'] += $request->quantity;
+        if (! $response->successful()) {
+            return back()->with('error', 'Produk tidak ditemukan.');
+        }
+
+        $apiProduct = $response->json();
+
+        $cart = session('cart', []);
+
+        if (isset($cart[$id])) {
+            $cart[$id]['quantity'] += $quantity;
         } else {
-            $cart[$key] = [
-                'id'       => $request->id,
-                'name'     => $request->name,
-                'price'    => $request->price,
-                'image'    => $request->image,
-                'size'     => $request->size,
-                'quantity' => $request->quantity,
+            $cart[$id] = [
+                'id' => $apiProduct['id'],
+                'name' => $apiProduct['title'],
+                'price' => (int) round($apiProduct['price'] * 15000),
+                'image' => $apiProduct['image'],
+                'size' => $size,
+                'quantity' => $quantity,
             ];
         }
 
-        session()->put('cart', $cart);
+        session(['cart' => $cart]);
 
-        return redirect()->route('cart.index')->with('success', 'Item added to cart!');
+        return back()->with('success', 'Produk ditambahkan ke keranjang.');
     }
 
     /**
-     * Update quantity of an item.
+     * Ubah jumlah (quantity) item di keranjang. $key = product id di dalam session cart.
      */
     public function update(Request $request, $key)
     {
-        $cart = session()->get('cart', []);
+        $request->validate([
+            'quantity' => 'required|integer|min:1',
+        ]);
+
+        $cart = session('cart', []);
 
         if (isset($cart[$key])) {
-            $qty = max(1, (int) $request->quantity);
-            $cart[$key]['quantity'] = $qty;
-            session()->put('cart', $cart);
+            $cart[$key]['quantity'] = (int) $request->input('quantity');
+            session(['cart' => $cart]);
         }
 
-        return redirect()->route('cart.index');
+        return back()->with('success', 'Keranjang diperbarui.');
     }
 
     /**
-     * Remove an item from the cart.
+     * Hapus item dari keranjang. $key = product id di dalam session cart.
      */
     public function remove($key)
     {
-        $cart = session()->get('cart', []);
-        unset($cart[$key]);
-        session()->put('cart', $cart);
+        $cart = session('cart', []);
 
-        return redirect()->route('cart.index')->with('success', 'Item removed.');
+        unset($cart[$key]);
+
+        session(['cart' => $cart]);
+
+        return back()->with('success', 'Produk dihapus dari keranjang.');
     }
 }

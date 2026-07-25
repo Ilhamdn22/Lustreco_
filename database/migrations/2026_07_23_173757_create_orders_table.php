@@ -23,6 +23,7 @@ return new class extends Migration
             $table->unsignedBigInteger('total');
             $table->string('status')->default('pending'); // pending, processing, shipped, delivered, cancelled
             $table->text('notes')->nullable();
+            $table->string('order_items')->nullable();
             $table->timestamps();
         });
     }

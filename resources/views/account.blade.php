@@ -1,274 +1,286 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>lustreco® | My Account</title>
-    
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Font Awesome Icons CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Google Fonts (Inter) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-    </style>
-</head>
-<body class="bg-gray-100 text-gray-900 antialiased flex flex-col min-h-screen">
+{{-- resources/views/account.blade.php --}}
+@extends('layouts.store')
 
-    <!-- Navbar Minimalis -->
-    <header id="main-header" class="sticky w-full top-0 z-40 bg-white border-b border-gray-100 px-8 py-5">
-        <div class="w-full flex items-center justify-between">
-            <!-- Left: Menu Hamburger -->
-            <button id="menu-btn" class="text-gray-800 hover:text-black focus:outline-none transition">
-                <i class="fa-solid fa-bars text-[24px]"></i>
-            </button>
+@section('title', 'My Account')
 
-            <!-- Center: Logo Lustreco -->
-            <a href="/" class="text-[32px] font-black tracking-tight flex items-start text-black absolute left-1/2 transform -translate-x-1/2">
-                lustreco<span class="text-sm font-normal ml-0.5 relative -top-1">®</span>
-            </a>
+@section('content')
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
-            <!-- Right: Search, Cart, Profile Icons -->
-            <div class="flex items-center space-x-6 text-gray-800">
-                <div class="relative">
-                    <button id="currency-btn" class="flex items-center space-x-2 mr-2 hover:opacity-70 transition focus:outline-none">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/9/9f/Flag_of_Indonesia.svg" alt="IDR" class="w-5 h-[14px] object-cover rounded-[1px]">
-                        <span class="text-[12px] font-medium tracking-wide mt-0.5">IDR</span>
-                    </button>
-                    
-                    <!-- Currency Popover -->
-                    <div id="currency-popover" class="absolute top-8 right-0 w-72 bg-white shadow-2xl rounded-2xl border border-gray-100 p-5 hidden z-50 text-left transform origin-top-right transition-all">
-                        <!-- Deliver to -->
-                        <div class="mb-4 relative">
-                            <label class="block text-[13px] text-gray-700 mb-1.5">Deliver to</label>
-                            <div class="relative">
-                                <div class="flex items-center justify-between border border-gray-200 rounded-xl p-3 cursor-pointer hover:border-gray-400 transition bg-white">
-                                    <div class="flex items-center space-x-3">
-                                        <img id="deliver-flag" src="https://upload.wikimedia.org/wikipedia/commons/9/9f/Flag_of_Indonesia.svg" class="w-6 h-4 object-cover rounded-[2px]">
-                                        <span id="deliver-text" class="text-[14px] text-gray-800">Indonesia</span>
-                                    </div>
-                                    <i class="fa-solid fa-chevron-down text-xs text-gray-800"></i>
-                                </div>
-                                <select id="deliver-select" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none">
-                                    <option value="Indonesia" data-flag="https://upload.wikimedia.org/wikipedia/commons/9/9f/Flag_of_Indonesia.svg">Indonesia</option>
-                                    <option value="Cambodia" data-flag="https://upload.wikimedia.org/wikipedia/commons/8/83/Flag_of_Cambodia.svg">Cambodia</option>
-                                    <option value="China" data-flag="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg">China</option>
-                                    <option value="Japan" data-flag="https://upload.wikimedia.org/wikipedia/en/9/9e/Flag_of_Japan.svg">Japan</option>
-                                    <option value="Malaysia" data-flag="https://upload.wikimedia.org/wikipedia/commons/2/28/Flag_of_Malaysia.svg">Malaysia</option>
-                                    <option value="Philippines" data-flag="https://upload.wikimedia.org/wikipedia/commons/9/99/Flag_of_the_Philippines.svg">Philippines</option>
-                                    <option value="Singapore" data-flag="https://upload.wikimedia.org/wikipedia/commons/4/48/Flag_of_Singapore.svg">Singapore</option>
-                                    <option value="Taiwan" data-flag="https://upload.wikimedia.org/wikipedia/commons/7/72/Flag_of_the_Republic_of_China.svg">Taiwan</option>
-                                    <option value="Thailand" data-flag="https://upload.wikimedia.org/wikipedia/commons/a/a9/Flag_of_Thailand.svg">Thailand</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <!-- Language -->
-                        <div class="mb-4 relative">
-                            <label class="block text-[13px] text-gray-700 mb-1.5">Language</label>
-                            <div class="relative">
-                                <div class="flex items-center justify-between border border-gray-200 rounded-xl p-3 cursor-pointer hover:border-gray-400 transition bg-white">
-                                    <div class="flex items-center space-x-3 text-gray-500">
-                                        <i class="fa-solid fa-globe text-lg"></i>
-                                        <span id="language-text" class="text-[14px] text-gray-800">English</span>
-                                    </div>
-                                    <i class="fa-solid fa-chevron-down text-xs text-gray-800"></i>
-                                </div>
-                                <select id="language-select" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none">
-                                    <option value="Bahasa">Bahasa</option>
-                                    <option value="English" selected>English</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Currency -->
-                        <div class="mb-5 relative">
-                            <label class="block text-[13px] text-gray-700 mb-1.5">Currency</label>
-                            <div class="relative">
-                                <div class="flex items-center justify-between border border-gray-200 rounded-xl p-3 cursor-pointer hover:border-gray-400 transition bg-white">
-                                    <span id="currency-text" class="text-[14px] text-gray-800">IDR - Indonesian Rupiah</span>
-                                    <i class="fa-solid fa-chevron-down text-xs text-gray-800"></i>
-                                </div>
-                                <select id="currency-select" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none">
-                                    <option value="IDR - Indonesian Rupiah">IDR - Indonesian Rupiah</option>
-                                    <option value="USD - United States Dollar">USD - United States Dollar</option>
-                                    <option value="SGD - Singapore Dollar">SGD - Singapore Dollar</option>
-                                    <option value="MYR - Malaysian Ringgit">MYR - Malaysian Ringgit</option>
-                                    <option value="THB - Thai Baht">THB - Thai Baht</option>
-                                    <option value="EUR - Euro">EUR - Euro</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <button id="save-currency-btn" class="w-full bg-black text-white font-medium py-3 rounded-xl hover:bg-gray-800 transition">Save</button>
-                    </div>
-                </div>
-                <a href="{{ url('/products') }}" class="hover:text-black transition">
-                    <i class="fa-solid fa-magnifying-glass text-[22px]"></i>
-                </a>
-                <a href="{{ url('/cart') }}" class="relative hover:text-black transition">
-                    <i class="fa-solid fa-bag-shopping text-[22px]"></i>
-                </a>
-                <a href="{{ url('/account') }}" class="hover:text-black transition">
-                    <i class="fa-regular fa-user text-[22px]"></i>
-                </a>
-            </div>
+    {{-- Toast Notifikasi Global --}}
+    @if(session('status') === 'profile-updated' || session('status') === 'password-updated')
+        <div id="success-toast" class="mb-6 bg-black text-white text-sm font-medium px-6 py-3 rounded-xl shadow-lg flex items-center gap-2 animate-fade-in-down">
+            <i class="fa-solid fa-check-circle text-green-400"></i>
+            {{ session('status') === 'profile-updated' ? 'Profile updated successfully!' : 'Password updated successfully!' }}
         </div>
-    </header>
+    @endif
 
-    <!-- Mobile Sidebar -->
-    <div id="mobile-sidebar" class="fixed inset-y-0 left-0 w-80 bg-white z-50 transform -translate-x-full transition-transform duration-300 ease-in-out border-r border-gray-200">
-        <div class="p-6 flex flex-col h-full mt-2">
-            <div class="flex items-center justify-between mb-6 px-1">
-                <button class="text-black hover:text-gray-600 transition">
-                    <i class="fa-solid fa-magnifying-glass text-[26px]"></i>
-                </button>
-                <button id="close-menu-btn" class="text-black hover:text-gray-600 transition focus:outline-none">
-                    <i class="fa-solid fa-xmark text-xl stroke-2"></i>
-                </button>
-            </div>
-            
-            <nav class="flex flex-col space-y-1 flex-grow">
-                <a href="{{ url('/products') }}" class="text-[14px] font-medium tracking-wide text-gray-900 hover:bg-[#d1d1d1] transition-colors px-4 py-3 rounded-lg block">SHOP</a>
-                <a href="#" class="text-[14px] font-medium tracking-wide text-gray-900 hover:bg-[#d1d1d1] transition-colors px-4 py-3 rounded-lg block">ABOUT</a>
-                <a href="#" class="text-[14px] font-medium tracking-wide text-gray-900 hover:bg-[#d1d1d1] transition-colors px-4 py-3 rounded-lg block">STORE</a>
-            </nav>
-        </div>
-    </div>
-    
-    <!-- Sidebar Overlay -->
-    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-30 z-40 hidden transition-opacity duration-300"></div>
+    <h1 class="text-2xl font-semibold text-gray-900 mb-6">My Account</h1>
 
-    <!-- Main Content -->
-    <main class="flex-grow w-full max-w-[1000px] mx-auto px-4 sm:px-6 py-10">
-        <h1 class="text-xl font-semibold mb-6">My Account</h1>
-        
-        @guest
-        <!-- Promotional Banner -->
-        <div class="bg-white rounded-[8px] shadow-sm border border-gray-100 p-6 flex flex-col md:flex-row items-center justify-between mb-8">
+    {{-- Guest Banner --}}
+    @guest
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col md:flex-row items-center justify-between mb-8">
             <div class="mb-4 md:mb-0">
                 <h2 class="text-[15px] font-medium text-gray-900 mb-2">Enjoy Special Discounts and Stay Connected</h2>
                 <p class="text-[13px] text-gray-500 max-w-3xl leading-relaxed">
-                    Get access to exclusive discounts while keeping track of your orders and chats with ease. Stay updated on your purchases and engage with us seamlessly, all in one place.
+                    Get access to exclusive discounts while keeping track of your orders and chats with ease.
                 </p>
             </div>
             <div class="flex space-x-3 shrink-0 ml-0 md:ml-6 w-full md:w-auto">
-                <a href="{{ route('login') }}" class="flex-1 md:flex-none text-center px-6 py-2 border border-gray-300 rounded-[20px] text-sm font-medium hover:bg-gray-50 transition">Login</a>
-                <a href="{{ route('register') }}" class="flex-1 md:flex-none text-center px-6 py-2 bg-black text-white rounded-[20px] text-sm font-medium hover:bg-gray-800 transition">Signup</a>
+                <a href="{{ route('login') }}" class="flex-1 md:flex-none text-center px-6 py-2 border border-gray-300 rounded-full text-sm font-medium hover:bg-gray-50 transition">Login</a>
+                <a href="{{ route('register') }}" class="flex-1 md:flex-none text-center px-6 py-2 bg-black text-white rounded-full text-sm font-medium hover:bg-gray-800 transition">Signup</a>
             </div>
         </div>
-        @endguest
+    @endguest
 
-        <!-- Tabs & Content -->
-        <div class="bg-white rounded-[8px] shadow-sm border border-gray-100 overflow-hidden">
-            <!-- Tabs -->
-            <div class="flex border-b border-gray-200">
-                <button class="w-full py-4 text-sm font-medium text-black border-b-2 border-black text-center">Orders</button>
-            </div>
-            
-            <!-- Content -->
-            <div class="p-6 min-h-[400px] flex flex-col">
-                <div class="flex justify-between items-center mb-16">
-                    <h3 class="text-[15px] font-medium">My Orders (0)</h3>
+    {{-- Main Card --}}
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+
+        {{-- Tab Navigation --}}
+        <div class="flex border-b border-gray-200" id="tabHeader">
+            <button class="tab-btn active" data-tab="orders">Orders</button>
+            @auth
+                <button class="tab-btn" data-tab="profile">Profile</button>
+            @endauth
+        </div>
+
+        {{-- Tab Content --}}
+        <div class="p-6">
+            {{-- Orders Tab --}}
+            <div id="tab-orders" class="tab-panel active">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+                    <h3 class="text-base font-medium">My Orders ({{ isset($orders) ? $orders->count() : 0 }})</h3>
                     <div class="relative">
-                        <select class="appearance-none border border-gray-200 rounded-md text-[13px] px-4 py-2 pr-8 focus:outline-none focus:border-gray-400 bg-white cursor-pointer min-w-[120px]">
-                            <option>All status</option>
+                        <select id="status-filter" class="appearance-none border border-gray-200 rounded-md text-sm px-4 py-2 pr-8 focus:outline-none focus:border-gray-400 bg-white cursor-pointer min-w-[130px]">
+                            <option value="all">All status</option>
+                            <option value="pending">Pending</option>
+                            <option value="processing">Processing</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
                         </select>
                         <i class="fa-solid fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-[10px] text-gray-500 pointer-events-none"></i>
                     </div>
                 </div>
 
-                <!-- Empty State -->
-                <div class="flex-grow flex flex-col items-center justify-center text-center pb-10">
-                    <i class="fa-solid fa-box-open text-5xl text-gray-300 mb-4 font-light"></i>
-                    <h4 class="text-[15px] font-medium text-gray-900 mb-1.5">No Orders Found</h4>
-                    <p class="text-[13px] text-gray-500">Place an order to see it listed here.</p>
-                </div>
+                @if(isset($orders) && $orders->count() > 0)
+                    <div class="divide-y divide-gray-100">
+                        @foreach($orders as $order)
+                            <div class="py-4 flex flex-wrap items-center justify-between gap-3 hover:bg-gray-50/50 -mx-2 px-2 rounded-lg transition">
+                                <div>
+                                    <div class="text-sm font-medium text-gray-900">Order #{{ $order->id }}</div>
+                                    <div class="text-xs text-gray-500">{{ $order->created_at->format('d M Y, H:i') }}</div>
+                                    <div class="text-xs text-gray-500 mt-1">
+                                        {{ $order->items->count() }} item(s) · Rp {{ number_format($order->total, 0, ',', '.') }}
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xs font-semibold px-3 py-1 rounded-full
+                                        @if($order->status == 'completed') bg-green-100 text-green-700
+                                        @elseif($order->status == 'processing') bg-yellow-100 text-yellow-700
+                                        @elseif($order->status == 'cancelled') bg-red-100 text-red-700
+                                        @else bg-gray-100 text-gray-700 @endif">
+                                        {{ ucfirst($order->status ?? 'Pending') }}
+                                    </span>
+                                    <a href="{{ route('orders.show', $order) }}" class="text-sm text-gray-500 hover:text-black transition font-medium">View</a>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="text-center py-12">
+                        <i class="fa-solid fa-box-open text-5xl text-gray-300 mb-4"></i>
+                        <h4 class="text-base font-medium text-gray-900 mb-1">No Orders Found</h4>
+                        <p class="text-sm text-gray-500">Place an order to see it listed here.</p>
+                        <a href="{{ route('products.index') }}" class="mt-4 inline-block bg-black text-white px-6 py-2 rounded-full hover:bg-gray-800 transition">
+                            Start Shopping
+                        </a>
+                    </div>
+                @endif
+
+                @auth
+                    <div class="mt-6 text-right border-t border-gray-100 pt-4">
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="text-sm text-gray-500 hover:text-black transition">Logout</button>
+                        </form>
+                    </div>
+                @endauth
             </div>
+
+            {{-- Profile Tab --}}
+            @auth
+                <div id="tab-profile" class="tab-panel">
+                    @php $user = auth()->user(); @endphp
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                        {{-- Sidebar --}}
+                        <div class="lg:col-span-4">
+                            <div class="bg-gray-50/80 rounded-2xl border border-gray-100 p-6 text-center">
+                                <div class="w-24 h-24 bg-white rounded-full mx-auto mb-4 border-2 border-gray-200 overflow-hidden flex items-center justify-center shadow-sm">
+                                    @if($user?->avatar && Storage::exists('public/' . $user->avatar))
+                                        <img src="{{ Storage::url($user->avatar) }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
+                                    @else
+                                        <i class="fa-regular fa-user text-3xl text-gray-400"></i>
+                                    @endif
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-900">{{ $user?->name ?? 'User' }}</h3>
+                                <p class="text-sm text-gray-500 mt-1">{{ $user?->email ?? '' }}</p>
+                                <div class="border-t border-gray-200 mt-4 pt-4 text-left space-y-2 text-sm">
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-500">Member Since</span>
+                                        <span class="font-medium text-gray-900">{{ $user?->created_at ? $user->created_at->format('M Y') : '-' }}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-500">Status</span>
+                                        <span class="text-xs font-semibold text-green-700 bg-green-50 px-2.5 py-1 rounded-full border border-green-200">Active</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Forms --}}
+                        <div class="lg:col-span-8 space-y-6">
+                            {{-- Profile Information --}}
+                            <div class="bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-sm transition">
+                                <h3 class="text-base font-semibold text-gray-900 mb-4">Profile Information</h3>
+                                <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="space-y-4">
+                                    @csrf @method('patch')
+                                    <div>
+                                        <label for="avatar" class="block text-sm font-medium text-gray-700 mb-1">Profile Photo</label>
+                                        <input id="avatar" name="avatar" type="file" accept="image/*" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:border-black focus:ring-1 focus:ring-black outline-none transition bg-gray-50/50">
+                                        @error('avatar') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                                    </div>
+                                    <div>
+                                        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                                        <input id="name" name="name" type="text" value="{{ old('name', $user?->name ?? '') }}" required class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-black focus:ring-1 focus:ring-black outline-none transition bg-gray-50/50 focus:bg-white">
+                                        @error('name') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                                    </div>
+                                    <div>
+                                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                        <input id="email" name="email" type="email" value="{{ old('email', $user?->email ?? '') }}" required class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-black focus:ring-1 focus:ring-black outline-none transition bg-gray-50/50 focus:bg-white">
+                                        @error('email') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                                    </div>
+                                    <button type="submit" class="bg-black text-white text-sm font-medium px-8 py-3 rounded-xl hover:bg-gray-800 transition shadow-sm">Save Changes</button>
+                                </form>
+                            </div>
+
+                            {{-- Change Password --}}
+                            <div class="bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-sm transition">
+                                <h3 class="text-base font-semibold text-gray-900 mb-4">Change Password</h3>
+                                <form method="POST" action="{{ route('password.update') }}" class="space-y-4">
+                                    @csrf @method('put')
+                                    <div>
+                                        <label for="current_password" class="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
+                                        <input id="current_password" name="current_password" type="password" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-black focus:ring-1 focus:ring-black outline-none transition bg-gray-50/50 focus:bg-white">
+                                        @error('current_password') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                                    </div>
+                                    <div>
+                                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">New Password</label>
+                                        <input id="password" name="password" type="password" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-black focus:ring-1 focus:ring-black outline-none transition bg-gray-50/50 focus:bg-white">
+                                        @error('password') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                                    </div>
+                                    <div>
+                                        <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+                                        <input id="password_confirmation" name="password_confirmation" type="password" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-black focus:ring-1 focus:ring-black outline-none transition bg-gray-50/50 focus:bg-white">
+                                    </div>
+                                    <button type="submit" class="bg-black text-white text-sm font-medium px-8 py-3 rounded-xl hover:bg-gray-800 transition shadow-sm">Update Password</button>
+                                </form>
+                            </div>
+
+                            {{-- Delete Account --}}
+                            <div class="bg-white rounded-2xl border border-red-200 p-6 bg-red-50/20 hover:border-red-300 transition">
+                                <h3 class="text-base font-semibold text-red-700 mb-2">Delete Account</h3>
+                                <p class="text-sm text-gray-500 mb-4">Once your account is deleted, all data will be permanently removed.</p>
+                                <form method="POST" action="{{ route('profile.destroy') }}" onsubmit="return confirm('Are you sure? This action is permanent.');">
+                                    @csrf @method('delete')
+                                    <div class="mb-4">
+                                        <label for="password_delete" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+                                        <input id="password_delete" name="password" type="password" placeholder="Enter your password" class="w-full max-w-xs border border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-black focus:ring-1 focus:ring-black outline-none transition bg-gray-50/50 focus:bg-white">
+                                        @error('password') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                                    </div>
+                                    <button type="submit" class="bg-white text-red-600 border border-red-300 text-sm font-medium px-6 py-3 rounded-xl hover:bg-red-50 transition">Delete My Account</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endauth
         </div>
-    </main>
+    </div>
+</div>
 
-    <!-- JS for Mobile Sidebar -->
-    <script>
-        const menuBtn = document.getElementById('menu-btn');
-        const closeMenuBtn = document.getElementById('close-menu-btn');
-        const sidebar = document.getElementById('mobile-sidebar');
-        const overlay = document.getElementById('sidebar-overlay');
-        const currencyBtn = document.getElementById('currency-btn');
-        const currencyPopover = document.getElementById('currency-popover');
+<style>
+    .tab-btn {
+        padding: 16px 24px;
+        font-size: 14px;
+        font-weight: 500;
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s;
+        cursor: pointer;
+        background: transparent;
+        color: #6b7280;
+        flex: 1;
+        text-align: center;
+    }
+    .tab-btn:hover {
+        color: #111;
+        border-bottom-color: #d1d5db;
+    }
+    .tab-btn.active {
+        color: #111;
+        border-bottom-color: #111;
+    }
+    .tab-panel {
+        display: none;
+    }
+    .tab-panel.active {
+        display: block;
+    }
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in-down {
+        animation: fadeInDown 0.3s ease-out forwards;
+    }
+</style>
 
-        function toggleMenu() {
-            const isClosed = sidebar.classList.contains('-translate-x-full');
-            if (isClosed) {
-                sidebar.classList.remove('-translate-x-full');
-                overlay.classList.remove('hidden');
-                document.body.style.overflow = 'hidden'; 
-            } else {
-                sidebar.classList.add('-translate-x-full');
-                overlay.classList.add('hidden');
-                document.body.style.overflow = '';
-            }
-        }
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Tabs
+        const tabs = document.querySelectorAll('.tab-btn');
+        const panels = document.querySelectorAll('.tab-panel');
 
-        if(menuBtn) menuBtn.addEventListener('click', toggleMenu);
-        if(closeMenuBtn) closeMenuBtn.addEventListener('click', toggleMenu);
-        if(overlay) overlay.addEventListener('click', toggleMenu);
-
-        if(currencyBtn) {
-            currencyBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                currencyPopover.classList.toggle('hidden');
+        tabs.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const tab = this.dataset.tab;
+                tabs.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                panels.forEach(p => p.classList.remove('active'));
+                document.getElementById('tab-' + tab).classList.add('active');
             });
-        }
-
-        document.addEventListener('click', (e) => {
-            if (currencyPopover && !currencyPopover.classList.contains('hidden') && !currencyPopover.contains(e.target) && e.target !== currencyBtn) {
-                currencyPopover.classList.add('hidden');
-            }
         });
 
-        const saveCurrencyBtn = document.getElementById('save-currency-btn');
-        if (saveCurrencyBtn) {
-            saveCurrencyBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (currencyPopover) {
-                    currencyPopover.classList.add('hidden');
-                }
+        // Status filter
+        const filter = document.getElementById('status-filter');
+        if (filter) {
+            filter.addEventListener('change', function() {
+                const url = new URL(window.location.href);
+                url.searchParams.set('status', this.value);
+                window.location.href = url.toString();
             });
         }
 
-        const deliverSelect = document.getElementById('deliver-select');
-        const deliverText = document.getElementById('deliver-text');
-        const deliverFlag = document.getElementById('deliver-flag');
-        
-        if (deliverSelect) {
-            deliverSelect.addEventListener('change', function() {
-                deliverText.textContent = this.value;
-                deliverFlag.src = this.options[this.selectedIndex].getAttribute('data-flag');
-            });
+        // Toast auto-hide
+        const toast = document.getElementById('success-toast');
+        if (toast) {
+            setTimeout(() => {
+                toast.style.transition = 'opacity 0.5s';
+                toast.style.opacity = '0';
+                setTimeout(() => { toast.style.display = 'none'; }, 500);
+            }, 3000);
         }
-
-        const languageSelect = document.getElementById('language-select');
-        const languageText = document.getElementById('language-text');
-        
-        if (languageSelect) {
-            languageSelect.addEventListener('change', function() {
-                languageText.textContent = this.value;
-            });
-        }
-
-        const currencySelect = document.getElementById('currency-select');
-        const currencyText = document.getElementById('currency-text');
-        
-        if (currencySelect) {
-            currencySelect.addEventListener('change', function() {
-                currencyText.textContent = this.value;
-            });
-        }
-    </script>
-</body>
-</html>
+    });
+</script>
+@endpush
+@endsection

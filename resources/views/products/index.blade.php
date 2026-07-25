@@ -1,355 +1,157 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>lustreco® | Shop</title>
-    
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Font Awesome Icons CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Google Fonts (Inter) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-    </style>
-</head>
-<body class="bg-white text-gray-900 antialiased flex flex-col min-h-screen">
+@extends('layouts.store')
 
-    <!-- Navbar Minimalis -->
-    <header id="main-header" class="sticky w-full top-0 z-40 bg-white border-b border-gray-100 px-8 py-5">
-        <div class="w-full flex items-center justify-between">
-            <!-- Left: Menu Hamburger -->
-            <button id="menu-btn" class="text-gray-800 hover:text-black focus:outline-none transition">
-                <i class="fa-solid fa-bars text-[24px]"></i>
-            </button>
+@section('navbar_style', 'sticky')
 
-            <!-- Center: Logo Lustreco -->
-            <a href="/" class="text-[32px] font-black tracking-tight flex items-start text-black absolute left-1/2 transform -translate-x-1/2">
-                lustreco<span class="text-sm font-normal ml-0.5 relative -top-1">®</span>
-            </a>
+@section('title', 'Products | lustreco®')
 
-            <!-- Right: Search, Cart, Profile Icons -->
-            <div class="flex items-center space-x-6 text-gray-800">
-                <div class="relative">
-                    <button id="currency-btn" class="flex items-center space-x-2 mr-2 hover:opacity-70 transition focus:outline-none">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/9/9f/Flag_of_Indonesia.svg" alt="IDR" class="w-5 h-[14px] object-cover rounded-[1px]">
-                        <span class="text-[12px] font-medium tracking-wide mt-0.5">IDR</span>
-                    </button>
-                    
-                    <!-- Currency Popover -->
-                    <div id="currency-popover" class="absolute top-8 right-0 w-72 bg-white shadow-2xl rounded-2xl border border-gray-100 p-5 hidden z-50 text-left transform origin-top-right transition-all">
-                        <!-- Deliver to -->
-                        <div class="mb-4 relative">
-                            <label class="block text-[13px] text-gray-700 mb-1.5">Deliver to</label>
-                            <div class="relative">
-                                <div class="flex items-center justify-between border border-gray-200 rounded-xl p-3 cursor-pointer hover:border-gray-400 transition bg-white">
-                                    <div class="flex items-center space-x-3">
-                                        <img id="deliver-flag" src="https://upload.wikimedia.org/wikipedia/commons/9/9f/Flag_of_Indonesia.svg" class="w-6 h-4 object-cover rounded-[2px]">
-                                        <span id="deliver-text" class="text-[14px] text-gray-800">Indonesia</span>
-                                    </div>
-                                    <i class="fa-solid fa-chevron-down text-xs text-gray-800"></i>
-                                </div>
-                                <select id="deliver-select" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none">
-                                    <option value="Indonesia" data-flag="https://upload.wikimedia.org/wikipedia/commons/9/9f/Flag_of_Indonesia.svg">Indonesia</option>
-                                    <option value="Cambodia" data-flag="https://upload.wikimedia.org/wikipedia/commons/8/83/Flag_of_Cambodia.svg">Cambodia</option>
-                                    <option value="China" data-flag="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg">China</option>
-                                    <option value="Japan" data-flag="https://upload.wikimedia.org/wikipedia/en/9/9e/Flag_of_Japan.svg">Japan</option>
-                                    <option value="Malaysia" data-flag="https://upload.wikimedia.org/wikipedia/commons/2/28/Flag_of_Malaysia.svg">Malaysia</option>
-                                    <option value="Philippines" data-flag="https://upload.wikimedia.org/wikipedia/commons/9/99/Flag_of_the_Philippines.svg">Philippines</option>
-                                    <option value="Singapore" data-flag="https://upload.wikimedia.org/wikipedia/commons/4/48/Flag_of_Singapore.svg">Singapore</option>
-                                    <option value="Taiwan" data-flag="https://upload.wikimedia.org/wikipedia/commons/7/72/Flag_of_the_Republic_of_China.svg">Taiwan</option>
-                                    <option value="Thailand" data-flag="https://upload.wikimedia.org/wikipedia/commons/a/a9/Flag_of_Thailand.svg">Thailand</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <!-- Language -->
-                        <div class="mb-4 relative">
-                            <label class="block text-[13px] text-gray-700 mb-1.5">Language</label>
-                            <div class="relative">
-                                <div class="flex items-center justify-between border border-gray-200 rounded-xl p-3 cursor-pointer hover:border-gray-400 transition bg-white">
-                                    <div class="flex items-center space-x-3 text-gray-500">
-                                        <i class="fa-solid fa-globe text-lg"></i>
-                                        <span id="language-text" class="text-[14px] text-gray-800">English</span>
-                                    </div>
-                                    <i class="fa-solid fa-chevron-down text-xs text-gray-800"></i>
-                                </div>
-                                <select id="language-select" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none">
-                                    <option value="Bahasa">Bahasa</option>
-                                    <option value="English" selected>English</option>
-                                </select>
-                            </div>
-                        </div>
+@section('content')
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
-                        <!-- Currency -->
-                        <div class="mb-5 relative">
-                            <label class="block text-[13px] text-gray-700 mb-1.5">Currency</label>
-                            <div class="relative">
-                                <div class="flex items-center justify-between border border-gray-200 rounded-xl p-3 cursor-pointer hover:border-gray-400 transition bg-white">
-                                    <span id="currency-text" class="text-[14px] text-gray-800">IDR - Indonesian Rupiah</span>
-                                    <i class="fa-solid fa-chevron-down text-xs text-gray-800"></i>
-                                </div>
-                                <select id="currency-select" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none">
-                                    <option value="IDR - Indonesian Rupiah">IDR - Indonesian Rupiah</option>
-                                    <option value="USD - United States Dollar">USD - United States Dollar</option>
-                                    <option value="SGD - Singapore Dollar">SGD - Singapore Dollar</option>
-                                    <option value="MYR - Malaysian Ringgit">MYR - Malaysian Ringgit</option>
-                                    <option value="THB - Thai Baht">THB - Thai Baht</option>
-                                    <option value="EUR - Euro">EUR - Euro</option>
-                                </select>
-                            </div>
-                        </div>
+    <div class="flex flex-col md:flex-row gap-8">
 
-                        <button id="save-currency-btn" class="w-full bg-black text-white font-medium py-3 rounded-xl hover:bg-gray-800 transition">Save</button>
-                    </div>
-                </div>
-                <a href="{{ url('/products') }}" class="hover:text-black transition">
-                    <i class="fa-solid fa-magnifying-glass text-[22px]"></i>
-                </a>
-                <a href="{{ url('/cart') }}" class="relative hover:text-black transition">
-                    <i class="fa-solid fa-bag-shopping text-[22px]"></i>
-                </a>
-                <a href="{{ url('/account') }}" class="hover:text-black transition">
-                    <i class="fa-regular fa-user text-[22px]"></i>
-                </a>
-            </div>
-        </div>
-    </header>
-
-    <!-- JS for Mobile Sidebar -->
-    <div id="mobile-sidebar" class="fixed inset-y-0 left-0 w-80 bg-white z-50 transform -translate-x-full transition-transform duration-300 ease-in-out border-r border-gray-200">
-        <div class="p-6 flex flex-col h-full mt-2">
-            <div class="flex items-center justify-between mb-6 px-1">
-                <button class="text-black hover:text-gray-600 transition">
-                    <i class="fa-solid fa-magnifying-glass text-[26px]"></i>
-                </button>
-                <button id="close-menu-btn" class="text-black hover:text-gray-600 transition focus:outline-none">
-                    <i class="fa-solid fa-xmark text-xl stroke-2"></i>
-                </button>
-            </div>
-            
-            <nav class="flex flex-col space-y-1 flex-grow">
-                <a href="{{ url('/products') }}" class="text-[14px] font-medium tracking-wide text-gray-900 hover:bg-[#d1d1d1] transition-colors px-4 py-3 rounded-lg block">SHOP</a>
-                <a href="{{ url('/about') }}" class="text-[14px] font-medium tracking-wide text-gray-900 hover:bg-[#d1d1d1] transition-colors px-4 py-3 rounded-lg block">ABOUT</a>
-                <a href="#" class="text-[14px] font-medium tracking-wide text-gray-900 hover:bg-[#d1d1d1] transition-colors px-4 py-3 rounded-lg block">STORE</a>
-            </nav>
-        </div>
-    </div>
-    
-    <!-- Sidebar Overlay -->
-    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-30 z-40 hidden transition-opacity duration-300"></div>
-
-    <!-- Main Content -->
-    <main class="flex-grow w-full max-w-[1400px] mx-auto px-6 py-10 flex flex-col md:flex-row gap-12">
-        
-        <!-- Left Sidebar (Filters) -->
-        <aside class="w-full md:w-56 flex-shrink-0 hidden md:block">
+        <!-- ===== SIDEBAR FILTER ===== -->
+        <aside class="w-full md:w-64 lg:w-72 flex-shrink-0 space-y-6">
             <!-- Search -->
-            <form action="{{ url('/products') }}" method="GET" class="mb-8 relative">
-                <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search" class="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-md text-sm focus:outline-none focus:border-gray-400 transition">
-            </form>
+            <div>
+                <h3 class="text-sm font-bold uppercase tracking-wider text-gray-900 mb-3">Search</h3>
+                <form action="{{ route('products.index') }}" method="GET" class="flex">
+                    <input type="text" name="search" value="{{ request('search') }}"
+                           placeholder="Search products..."
+                           class="w-full border border-gray-200 rounded-l-xl px-4 py-2 text-sm focus:outline-none focus:border-black transition">
+                    <button type="submit" class="bg-black text-white px-4 py-2 rounded-r-xl text-sm hover:bg-gray-800 transition">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </form>
+            </div>
 
             <!-- Categories -->
-            <div class="mb-8 border-b border-gray-100 pb-6">
-                <div class="flex justify-between items-center mb-5 cursor-pointer">
-                    <h3 class="font-medium text-sm text-gray-900">Categories</h3>
-                    <i class="fa-solid fa-chevron-up text-xs text-gray-500"></i>
-                </div>
-                <div class="space-y-4">
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="checkbox" class="form-checkbox h-4 w-4 text-black border-gray-300 rounded-[3px] focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">Tees</span>
-                    </label>
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="checkbox" class="form-checkbox h-4 w-4 text-black border-gray-300 rounded-[3px] focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">Shirts</span>
-                    </label>
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="checkbox" class="form-checkbox h-4 w-4 text-black border-gray-300 rounded-[3px] focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">Outerwear</span>
-                    </label>
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="checkbox" class="form-checkbox h-4 w-4 text-black border-gray-300 rounded-[3px] focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">Sweaters</span>
-                    </label>
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="checkbox" class="form-checkbox h-4 w-4 text-black border-gray-300 rounded-[3px] focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">Pants</span>
-                    </label>
-                    <button class="text-[13px] text-gray-900 font-medium mt-3 flex items-center hover:text-gray-600 transition">
-                        See More <i class="fa-solid fa-chevron-down text-[9px] ml-1.5"></i>
-                    </button>
-                </div>
+            <div>
+                <h3 class="text-sm font-bold uppercase tracking-wider text-gray-900 mb-3">Categories</h3>
+                <ul class="space-y-1.5 text-sm">
+                    <li>
+                        <a href="{{ route('products.index', array_merge(request()->query(), ['category' => 'all'])) }}"
+                           class="{{ (!request('category') || request('category') == 'all') ? 'font-semibold text-black' : 'text-gray-500 hover:text-black' }} transition">
+                            All Categories
+                        </a>
+                    </li>
+                    @foreach($categories as $cat)
+                        <li>
+                            <a href="{{ route('products.index', array_merge(request()->query(), ['category' => $cat])) }}"
+                               class="{{ request('category') == $cat ? 'font-semibold text-black' : 'text-gray-500 hover:text-black' }} transition">
+                                {{ ucfirst($cat) }}
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
             </div>
 
             <!-- Product Type -->
-            <div class="mb-8 border-b border-gray-100 pb-6">
-                <div class="flex justify-between items-center mb-5 cursor-pointer">
-                    <h3 class="font-medium text-sm text-gray-900">Product Type</h3>
-                    <i class="fa-solid fa-chevron-up text-xs text-gray-500"></i>
-                </div>
-                <div class="space-y-4">
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="radio" name="product_type" checked class="form-radio h-4 w-4 text-black border-gray-300 focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">All Products</span>
+            <div>
+                <h3 class="text-sm font-bold uppercase tracking-wider text-gray-900 mb-3">Product Type</h3>
+                <div class="space-y-1.5 text-sm">
+                    <label class="flex items-center cursor-pointer">
+                        <input type="radio" name="type" value="all"
+                               {{ (!request('type') || request('type') == 'all') ? 'checked' : '' }}
+                               onchange="window.location.href='{{ route('products.index', array_merge(request()->query(), ['type' => 'all'])) }}'"
+                               class="mr-2 accent-black w-3.5 h-3.5">
+                        All Products
                     </label>
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="radio" name="product_type" class="form-radio h-4 w-4 text-black border-gray-300 focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">Discount</span>
+                    <label class="flex items-center cursor-pointer">
+                        <input type="radio" name="type" value="discount"
+                               {{ request('type') == 'discount' ? 'checked' : '' }}
+                               onchange="window.location.href='{{ route('products.index', array_merge(request()->query(), ['type' => 'discount'])) }}'"
+                               class="mr-2 accent-black w-3.5 h-3.5">
+                        Discount
                     </label>
                 </div>
             </div>
 
             <!-- Availability -->
-            <div class="mb-8 border-b border-gray-100 pb-6">
-                <div class="flex justify-between items-center mb-5 cursor-pointer">
-                    <h3 class="font-medium text-sm text-gray-900">Availability</h3>
-                    <i class="fa-solid fa-chevron-up text-xs text-gray-500"></i>
-                </div>
-                <div class="space-y-4">
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="radio" name="availability" checked class="form-radio h-4 w-4 text-black border-gray-300 focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">All</span>
+            <div>
+                <h3 class="text-sm font-bold uppercase tracking-wider text-gray-900 mb-3">Availability</h3>
+                <div class="space-y-1.5 text-sm">
+                    <label class="flex items-center cursor-pointer">
+                        <input type="radio" name="availability" value="all"
+                               {{ (!request('availability') || request('availability') == 'all') ? 'checked' : '' }}
+                               onchange="window.location.href='{{ route('products.index', array_merge(request()->query(), ['availability' => 'all'])) }}'"
+                               class="mr-2 accent-black w-3.5 h-3.5">
+                        All
                     </label>
-                    <label class="flex items-center space-x-3 cursor-pointer group">
-                        <input type="radio" name="availability" class="form-radio h-4 w-4 text-black border-gray-300 focus:ring-0 focus:ring-offset-0 cursor-pointer">
-                        <span class="text-[13px] text-gray-600 group-hover:text-black transition">In Stock</span>
+                    <label class="flex items-center cursor-pointer">
+                        <input type="radio" name="availability" value="in_stock"
+                               {{ request('availability') == 'in_stock' ? 'checked' : '' }}
+                               onchange="window.location.href='{{ route('products.index', array_merge(request()->query(), ['availability' => 'in_stock'])) }}'"
+                               class="mr-2 accent-black w-3.5 h-3.5">
+                        In Stock
                     </label>
                 </div>
             </div>
-            
-            <!-- Price -->
-            <div class="mb-6">
-                <div class="flex justify-between items-center cursor-pointer">
-                    <h3 class="font-medium text-sm text-gray-900">Price</h3>
-                    <i class="fa-solid fa-chevron-up text-xs text-gray-500"></i>
-                </div>
+
+            <!-- Reset Filter -->
+            <div class="pt-3 border-t border-gray-200">
+                <a href="{{ route('products.index') }}" class="text-sm text-gray-400 hover:text-black transition underline">
+                    Clear all filters
+                </a>
             </div>
         </aside>
 
-        <!-- Right Content (Product Grid) -->
-        <div class="flex-grow">
-            <!-- Top bar -->
-            <div class="flex justify-between items-center mb-10">
-                <h1 class="text-[17px] font-medium text-gray-900 tracking-wide">All Products</h1>
-                <div class="flex items-center space-x-1.5 border border-gray-200 rounded text-gray-700 px-3 py-1.5 cursor-pointer hover:border-gray-300 transition">
-                    <span class="text-[11px] text-gray-500">sort :</span>
-                    <span class="text-[11px] font-medium">Recent</span>
-                    <i class="fa-solid fa-chevron-down text-[9px] ml-1"></i>
-                </div>
+        <!-- ===== PRODUCT GRID ===== -->
+        <div class="flex-1">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-lg font-semibold text-gray-900">
+                    Products <span class="text-sm font-normal text-gray-400">({{ $products->count() }})</span>
+                </h2>
+                @if(request()->hasAny(['search', 'category', 'type', 'availability']))
+                    <span class="text-xs text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+                        <i class="fa-solid fa-filter mr-1"></i> Filter aktif
+                    </span>
+                @endif
             </div>
 
-            <!-- Grid -->
             @if($products->isEmpty())
-                <div class="py-16 text-center text-gray-500 border border-dashed border-gray-200 rounded-lg">
-                    <p>Belum ada produk yang tersedia saat ini.</p>
+                <div class="text-center py-16">
+                    <i class="fa-solid fa-box-open text-4xl text-gray-300 mb-4"></i>
+                    <p class="text-gray-500">No products found.</p>
+                    <a href="{{ route('products.index') }}" class="text-sm text-black underline mt-2 inline-block">View all products</a>
                 </div>
             @else
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
+                <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                     @foreach($products as $product)
-                        <a href="{{ url('/products/' . $product->id) }}" class="group cursor-pointer block">
-                            <!-- Image Container -->
-                            <div class="relative w-full aspect-square mb-4 bg-gray-50 overflow-hidden rounded-[2px]">
-                                <img src="{{ $product->image ?? 'https://via.placeholder.com/600' }}" alt="{{ $product->name }}" class="w-full h-full object-cover object-center group-hover:scale-[1.02] transition duration-500 ease-out">
+                        <div class="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition group">
+                            <a href="{{ route('products.show', $product->id) }}" class="block">
+                                <div class="h-52 bg-gray-50 flex items-center justify-center p-4">
+                                    <img src="{{ $product->image }}" alt="{{ $product->name }}"
+                                         class="w-full h-full object-contain transition group-hover:scale-105 duration-300">
+                                </div>
+                            </a>
+                            <div class="p-4">
+                                <a href="{{ route('products.show', $product->id) }}"
+                                   class="text-sm font-medium text-gray-900 hover:underline line-clamp-2">
+                                    {{ $product->name }}
+                                </a>
+                                <p class="text-sm font-semibold text-gray-900 mt-2">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+                                <p class="text-xs text-gray-500 capitalize mt-0.5">{{ $product->category }}</p>
+                                <div class="mt-3 grid grid-cols-2 gap-2">
+                                    <form action="{{ route('cart.add') }}" method="POST" class="col-span-1">
+                                        @csrf
+                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button type="submit"
+                                                class="w-full bg-black text-white text-sm py-2 rounded-xl hover:bg-gray-800 transition">
+                                            <i class="fa-solid fa-cart-plus mr-1"></i> Add
+                                        </button>
+                                    </form>
+                                    <a href="{{ route('checkout') }}?product_id={{ $product->id }}"
+                                       class="flex items-center justify-center border border-black text-black text-sm py-2 rounded-xl hover:bg-gray-50 transition">
+                                        <i class="fa-solid fa-bolt mr-1"></i> Buy
+                                    </a>
+                                </div>
                             </div>
-                            <!-- Details -->
-                            <div class="text-left px-1">
-                                <h3 class="text-[13px] text-gray-900 leading-snug mb-1 font-medium group-hover:underline underline-offset-4 decoration-gray-300">{{ $product->name }}</h3>
-                                <p class="text-[12px] text-gray-500 mb-1.5">Lustreco</p>
-                                <p class="text-[13px] font-medium text-gray-900">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
-                            </div>
-                        </a>
+                        </div>
                     @endforeach
                 </div>
             @endif
         </div>
-    </main>
-
-    <!-- JS for Mobile Sidebar -->
-    <script>
-        const menuBtn = document.getElementById('menu-btn');
-        const closeMenuBtn = document.getElementById('close-menu-btn');
-        const sidebar = document.getElementById('mobile-sidebar');
-        const overlay = document.getElementById('sidebar-overlay');
-        const currencyBtn = document.getElementById('currency-btn');
-        const currencyPopover = document.getElementById('currency-popover');
-
-        function toggleMenu() {
-            const isClosed = sidebar.classList.contains('-translate-x-full');
-            if (isClosed) {
-                sidebar.classList.remove('-translate-x-full');
-                overlay.classList.remove('hidden');
-                document.body.style.overflow = 'hidden'; // Prevent scrolling
-            } else {
-                sidebar.classList.add('-translate-x-full');
-                overlay.classList.add('hidden');
-                document.body.style.overflow = '';
-            }
-        }
-
-        if(menuBtn) menuBtn.addEventListener('click', toggleMenu);
-        if(closeMenuBtn) closeMenuBtn.addEventListener('click', toggleMenu);
-        if(overlay) overlay.addEventListener('click', toggleMenu);
-
-        // Currency Popover Toggle
-        if(currencyBtn) {
-            currencyBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                currencyPopover.classList.toggle('hidden');
-            });
-        }
-
-        // Close Popover when clicking outside
-        document.addEventListener('click', (e) => {
-            if (currencyPopover && !currencyPopover.classList.contains('hidden') && !currencyPopover.contains(e.target) && e.target !== currencyBtn) {
-                currencyPopover.classList.add('hidden');
-            }
-        });
-
-        const saveCurrencyBtn = document.getElementById('save-currency-btn');
-        if (saveCurrencyBtn) {
-            saveCurrencyBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (currencyPopover) {
-                    currencyPopover.classList.add('hidden');
-                }
-            });
-        }
-
-        // Sync Dropdowns with UI
-        const deliverSelect = document.getElementById('deliver-select');
-        const deliverText = document.getElementById('deliver-text');
-        const deliverFlag = document.getElementById('deliver-flag');
-        
-        if (deliverSelect) {
-            deliverSelect.addEventListener('change', function() {
-                deliverText.textContent = this.value;
-                deliverFlag.src = this.options[this.selectedIndex].getAttribute('data-flag');
-            });
-        }
-
-        const languageSelect = document.getElementById('language-select');
-        const languageText = document.getElementById('language-text');
-        
-        if (languageSelect) {
-            languageSelect.addEventListener('change', function() {
-                languageText.textContent = this.value;
-            });
-        }
-
-        const currencySelect = document.getElementById('currency-select');
-        const currencyText = document.getElementById('currency-text');
-        
-        if (currencySelect) {
-            currencySelect.addEventListener('change', function() {
-                currencyText.textContent = this.value;
-            });
-        }
-    </script>
-</body>
-</html>
+    </div>
+</div>
+@endsection

@@ -1,92 +1,144 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('register') }}" class="p-8 pb-10">
-        @csrf
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lustreco® | Register</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .hero-bg {
+            background-image: url('https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=1600&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center 30%;
+            background-repeat: no-repeat;
+        }
+        .card-glass {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        input {
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        input:focus {
+            border-color: #111;
+            box-shadow: 0 0 0 3px rgba(0,0,0,0.08);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col hero-bg">
 
-        <!-- Header -->
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-[22px] font-bold">Register</h2>
-            <a href="{{ url('/') }}" class="text-black hover:text-gray-600 transition">
-                <i class="fa-solid fa-xmark text-xl"></i>
-            </a>
+    <header class="w-full px-6 py-4 flex items-center justify-between bg-white/80 backdrop-blur-sm border-b border-white/30">
+        <a href="{{ route('home') }}" class="flex items-center gap-1.5 text-gray-600 hover:text-black transition text-sm font-medium">
+            <i class="fa-solid fa-arrow-left text-sm"></i>
+            <span>Back</span>
+        </a>
+        <a href="{{ route('home') }}" class="text-2xl font-black tracking-tight text-black">
+            lustreco<span class="text-sm font-normal ml-0.5 relative -top-1">®</span>
+        </a>
+        <div class="flex items-center gap-1.5 text-gray-600 text-sm">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/9f/Flag_of_Indonesia.svg"
+                 alt="IDR" class="w-5 h-3.5 object-cover rounded-sm">
+            <span class="text-[11px] font-medium tracking-wide">IDR</span>
         </div>
+    </header>
 
-        <p class="text-[15px] text-gray-700 mb-6 leading-relaxed">
-            Create account to be our member to earn points, get free vouchers, and hear our news earlier.
-        </p>
+    <main class="flex-grow flex items-center justify-center px-4 py-8">
+        <div class="w-full max-w-md card-glass rounded-3xl shadow-2xl p-8 md:p-10 relative">
 
-        <!-- Name -->
-        <div class="mb-4">
-            <input id="name" class="block w-full px-5 py-3.5 rounded-2xl border border-gray-200 focus:border-black focus:ring-0 outline-none transition text-[15px]" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" placeholder="Your Full Name*" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2 text-red-500 text-sm" />
-        </div>
+            <button onclick="window.location.href='{{ route('home') }}'"
+                    class="absolute top-4 right-4 text-gray-400 hover:text-black transition text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
 
-        <!-- Email Address -->
-        <div class="mb-4 relative">
-            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <i class="fa-regular fa-user text-gray-400 text-lg"></i>
+            <div class="text-center mb-7">
+                <h1 class="text-2xl font-bold text-gray-900">Create Account</h1>
+                <p class="text-sm text-gray-500 mt-1">Join the lustreco community</p>
             </div>
-            <input id="email" class="block w-full pl-11 pr-5 py-3.5 rounded-2xl border border-gray-200 focus:border-black focus:ring-0 outline-none transition text-[15px]" type="email" name="email" :value="old('email')" required autocomplete="username" placeholder="Your email" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2 text-red-500 text-sm" />
-        </div>
 
-        <!-- Password -->
-        <div class="mb-4 relative">
-            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <i class="fa-solid fa-lock text-gray-400 text-lg"></i>
-            </div>
-            <input id="password" class="block w-full pl-11 pr-5 py-3.5 rounded-2xl border border-gray-200 focus:border-black focus:ring-0 outline-none transition text-[15px]" type="password" name="password" required autocomplete="new-password" placeholder="Password" />
-            <x-input-error :messages="$errors->get('password')" class="mt-2 text-red-500 text-sm" />
-        </div>
+            <form method="POST" action="{{ route('register') }}" class="space-y-4">
+                @csrf
 
-        <!-- Confirm Password -->
-        <div class="mb-6 relative">
-            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <i class="fa-solid fa-lock text-gray-400 text-lg"></i>
-            </div>
-            <input id="password_confirmation" class="block w-full pl-11 pr-5 py-3.5 rounded-2xl border border-gray-200 focus:border-black focus:ring-0 outline-none transition text-[15px]" type="password" name="password_confirmation" required autocomplete="new-password" placeholder="Confirm Password" />
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2 text-red-500 text-sm" />
-        </div>
-
-        <!-- Birthday (Visual Only) -->
-        <div class="mb-8">
-            <label class="block text-[15px] text-gray-800 mb-3">My Birthday (Optional)</label>
-            <div class="grid grid-cols-3 gap-3">
-                <div class="relative">
-                    <select class="block w-full px-4 py-3 rounded-2xl border border-gray-200 focus:border-black focus:ring-0 outline-none transition text-[15px] appearance-none cursor-pointer bg-white text-gray-500">
-                        <option value="" disabled selected>Day</option>
-                        @for ($i = 1; $i <= 31; $i++)
-                            <option value="{{ $i }}">{{ $i }}</option>
-                        @endfor
-                    </select>
-                    <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 transform -translate-y-1/2 text-[11px] text-black pointer-events-none"></i>
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-700 mb-1.5">Full Name</label>
+                    <div class="relative">
+                        <i class="fa-regular fa-user absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                        <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus
+                               placeholder="John Doe"
+                               class="w-full border border-gray-200 rounded-xl pl-11 pr-4 py-3 text-sm bg-white/70 focus:bg-white focus:border-black focus:ring-1 focus:ring-black outline-none transition">
+                    </div>
+                    @error('name') <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p> @enderror
                 </div>
-                <div class="relative">
-                    <select class="block w-full px-4 py-3 rounded-2xl border border-gray-200 focus:border-black focus:ring-0 outline-none transition text-[15px] appearance-none cursor-pointer bg-white text-gray-500">
-                        <option value="" disabled selected>Month</option>
-                        @foreach (['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] as $month)
-                            <option value="{{ $month }}">{{ $month }}</option>
-                        @endforeach
-                    </select>
-                    <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 transform -translate-y-1/2 text-[11px] text-black pointer-events-none"></i>
+
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1.5">Email Address</label>
+                    <div class="relative">
+                        <i class="fa-regular fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                        <input id="email" type="email" name="email" value="{{ old('email') }}" required
+                               placeholder="your@email.com"
+                               class="w-full border border-gray-200 rounded-xl pl-11 pr-4 py-3 text-sm bg-white/70 focus:bg-white focus:border-black focus:ring-1 focus:ring-black outline-none transition">
+                    </div>
+                    @error('email') <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p> @enderror
                 </div>
-                <div class="relative">
-                    <select class="block w-full px-4 py-3 rounded-2xl border border-gray-200 focus:border-black focus:ring-0 outline-none transition text-[15px] appearance-none cursor-pointer bg-white text-gray-500">
-                        <option value="" disabled selected>Year</option>
-                        @for ($i = date('Y'); $i >= 1950; $i--)
-                            <option value="{{ $i }}">{{ $i }}</option>
-                        @endfor
-                    </select>
-                    <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 transform -translate-y-1/2 text-[11px] text-black pointer-events-none"></i>
+
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                        <input id="password" type="password" name="password" required
+                               placeholder="••••••••"
+                               class="w-full border border-gray-200 rounded-xl pl-11 pr-4 py-3 text-sm bg-white/70 focus:bg-white focus:border-black focus:ring-1 focus:ring-black outline-none transition">
+                    </div>
+                    @error('password') <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p> @enderror
+                </div>
+
+                <div>
+                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1.5">Confirm Password</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-check-circle absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                        <input id="password_confirmation" type="password" name="password_confirmation" required
+                               placeholder="••••••••"
+                               class="w-full border border-gray-200 rounded-xl pl-11 pr-4 py-3 text-sm bg-white/70 focus:bg-white focus:border-black focus:ring-1 focus:ring-black outline-none transition">
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-black text-white text-sm font-semibold py-3.5 rounded-xl hover:bg-gray-800 transition shadow-lg shadow-black/20">
+                    Sign up
+                </button>
+
+                <p class="text-center text-sm text-gray-500 pt-1">
+                    Already have an account?
+                    <a href="{{ route('login') }}" class="text-black font-semibold hover:underline">Log in</a>
+                </p>
+            </form>
+
+            <div class="relative my-6">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-gray-200/70"></div>
+                </div>
+                <div class="relative flex justify-center text-xs">
+                    <span class="bg-white/80 px-4 text-gray-400 backdrop-blur-sm">or continue with</span>
                 </div>
             </div>
-        </div>
 
-        <button type="submit" class="w-full bg-[#B3B3B3] text-white font-medium py-3.5 rounded-2xl hover:bg-gray-400 transition mb-6">
-            Create New Account
-        </button>
-
-        <div class="text-center text-[14px] text-gray-800">
-            Already have account? Login <a href="{{ route('login') }}" class="font-bold hover:underline">here</a>
+            <div class="grid grid-cols-2 gap-3">
+                <button class="flex items-center justify-center gap-2 border border-gray-200/70 rounded-xl py-3 hover:bg-white/50 transition text-sm font-medium text-gray-700 bg-white/30">
+                    <i class="fa-brands fa-google text-red-500"></i> Google
+                </button>
+                <button class="flex items-center justify-center gap-2 border border-gray-200/70 rounded-xl py-3 hover:bg-white/50 transition text-sm font-medium text-gray-700 bg-white/30">
+                    <i class="fa-brands fa-apple text-black"></i> Apple
+                </button>
+            </div>
         </div>
-    </form>
-</x-guest-layout>
+    </main>
+
+    <footer class="text-center text-xs text-white/70 py-4 bg-black/20 backdrop-blur-sm">
+        &copy; {{ date('Y') }} lustreco®. All rights reserved.
+    </footer>
+
+</body>
+</html>

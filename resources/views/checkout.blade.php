@@ -1,162 +1,121 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>lustreco® | Checkout</title>
-    
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Font Awesome Icons CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Google Fonts (Inter) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-    </style>
-</head>
-<body class="bg-[#FAFAFA] text-gray-900 antialiased min-h-screen flex flex-col">
+{{-- resources/views/checkout.blade.php --}}
+@extends('layouts.store')
 
-    <!-- Minimal Header -->
-    <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between sticky top-0 z-40">
-        <a href="javascript:history.back()" class="text-black hover:text-gray-600 transition">
-            <i class="fa-solid fa-arrow-left"></i>
-        </a>
-        <a href="/" class="text-[28px] font-black tracking-tight flex items-start text-black absolute left-1/2 transform -translate-x-1/2">
-            lustreco<span class="text-xs font-normal ml-0.5 relative -top-1">®</span>
-        </a>
-        <div class="w-4"></div> <!-- placeholder -->
-    </header>
+@section('title', 'Checkout | lustreco®')
 
-    <main class="flex-grow max-w-[1100px] mx-auto w-full px-4 sm:px-6 py-10 flex flex-col lg:flex-row gap-12">
-        
-        <!-- Left Column: Forms -->
-        <div class="w-full lg:w-3/5 space-y-10">
-            
-            <!-- Address Details -->
-            <div>
-                <h2 class="text-[17px] font-bold mb-4">Address Details</h2>
-                <p class="text-[14px] text-gray-700 mb-6">Do you have a account? <a href="/login" class="font-medium underline hover:text-black transition">Login</a></p>
-                
-                <div class="space-y-4">
-                    <div>
-                        <input type="email" placeholder="Email Address (Optional)" class="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-[14px] outline-none focus:border-black transition">
-                        <p class="text-[11px] text-gray-500 mt-1.5 ml-1">We will send your order details to your email.</p>
-                    </div>
-                    
-                    <input type="text" placeholder="Recipient Full Name" class="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-[14px] outline-none focus:border-black transition">
-                    
-                    <input type="text" placeholder="Recipient Phone Number" class="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-[14px] outline-none focus:border-black transition">
-                    
-                    <div class="relative">
-                        <select class="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-[14px] outline-none focus:border-black transition appearance-none bg-white text-gray-900 cursor-pointer pt-6 pb-2">
-                            <option>Indonesia</option>
-                        </select>
-                        <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 transform -translate-y-1/2 text-[10px] text-gray-600 pointer-events-none"></i>
-                        <span class="absolute left-4 top-2 text-[10px] text-gray-400">Country</span>
-                    </div>
+@section('navbar_style', 'sticky')
 
-                    <div class="relative">
-                        <input type="text" placeholder="Sub-district, District, City" class="w-full border border-gray-200 rounded-xl pl-4 pr-10 py-3.5 text-[14px] outline-none focus:border-black transition">
-                        <i class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                    </div>
+@section('content')
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
-                    <textarea placeholder="Address Details" rows="3" class="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-[14px] outline-none focus:border-black transition resize-none"></textarea>
-                </div>
-            </div>
-
-            <!-- Shipment Method -->
-            <div>
-                <h2 class="text-[17px] font-bold mb-4">Shipment Method</h2>
-                <div class="bg-gray-100 rounded-xl p-4 text-[13px] text-gray-500">
-                    Complete address detail to see available shipping methods.
-                </div>
-            </div>
-
-            <!-- Payment Method -->
-            <div>
-                <h2 class="text-[17px] font-bold mb-4">Payment Method</h2>
-                <div class="border border-gray-200 rounded-xl p-4 flex items-center justify-between cursor-pointer hover:border-gray-400 transition bg-white">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Logo_of_Bank_Mandiri.svg" alt="Mandiri" class="h-5 object-contain">
-                    <div class="flex items-center space-x-3">
-                        <span class="text-[14px] text-gray-800">Mandiri</span>
-                        <i class="fa-solid fa-chevron-right text-[10px] text-gray-500"></i>
-                    </div>
-                </div>
-            </div>
-            
+    @if(isset($items) && $items->count() > 0)
+        <div class="flex items-center gap-3 mb-8">
+            <h1 class="text-2xl font-bold text-gray-900">Checkout</h1>
+            <span class="text-sm text-gray-400">| {{ $items->sum('quantity') }} item(s)</span>
         </div>
 
-        <!-- Right Column: Order Summary -->
-        <div class="w-full lg:w-2/5">
-            <div class="sticky top-24 space-y-6">
-                <!-- Product Card -->
-                <div class="bg-white border border-gray-100 rounded-xl p-4 shadow-sm flex items-start space-x-4">
-                    <div class="w-16 h-16 bg-gray-50 rounded-md border border-gray-100 flex items-center justify-center flex-shrink-0">
-                        <img src="https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg" alt="Product" class="w-full h-full object-cover rounded-md p-1">
-                    </div>
-                    <div class="flex-grow">
-                        <h3 class="text-[13px] font-medium text-gray-900 leading-tight mb-1 pr-4">Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops</h3>
-                        <p class="text-[11px] text-gray-500 mb-1">Lustreco</p>
-                        <p class="text-[11px] text-gray-500 mb-2">Quantity: 1</p>
-                    </div>
-                    <div class="flex-shrink-0">
-                        <p class="text-[13px] font-medium text-gray-900">Rp 1.649.250</p>
-                    </div>
-                </div>
+        <form action="{{ route('checkout.store') }}" method="POST">
+            @csrf
 
-                <!-- Extras -->
-                <div class="space-y-3">
-                    <div class="bg-white border border-gray-100 rounded-xl p-4 shadow-sm flex justify-between items-center cursor-pointer hover:border-gray-300 transition text-[13px] text-gray-600">
-                        <span>Leave a message for delivery (Optional)</span>
-                        <i class="fa-solid fa-chevron-right text-[10px] text-gray-400"></i>
-                    </div>
-                    <div class="bg-white border border-gray-100 rounded-xl p-4 shadow-sm flex justify-between items-center cursor-pointer hover:border-gray-300 transition text-[13px] text-gray-600">
-                        <div class="flex items-center space-x-2">
-                            <i class="fa-solid fa-ticket text-gray-400"></i>
-                            <span>Vouchers</span>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+                {{-- Left Column: Forms --}}
+                <div class="lg:col-span-2 space-y-6">
+                    {{-- Shipping Details --}}
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+                        <h2 class="text-lg font-semibold text-gray-900 mb-4">Shipping Details</h2>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Recipient Name</label>
+                                <input type="text" name="recipient_name" value="{{ old('recipient_name', auth()->user()->name ?? '') }}"
+                                       class="w-full border border-gray-200 rounded-xl px-4 py-3 focus:border-black focus:ring-1 focus:ring-black outline-none transition"
+                                       placeholder="Full name" required>
+                                @error('recipient_name') <p class="text-sm text-red-600 mt-1">{{ $message }}</p> @enderror
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                                <input type="text" name="phone" value="{{ old('phone') }}"
+                                       class="w-full border border-gray-200 rounded-xl px-4 py-3 focus:border-black focus:ring-1 focus:ring-black outline-none transition"
+                                       placeholder="08xxx" required>
+                                @error('phone') <p class="text-sm text-red-600 mt-1">{{ $message }}</p> @enderror
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Shipping Address</label>
+                                <textarea name="shipping_address" rows="3"
+                                          class="w-full border border-gray-200 rounded-xl px-4 py-3 focus:border-black focus:ring-1 focus:ring-black outline-none transition resize-none"
+                                          placeholder="Street, district, city, postal code" required>{{ old('shipping_address') }}</textarea>
+                                @error('shipping_address') <p class="text-sm text-red-600 mt-1">{{ $message }}</p> @enderror
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Payment Method</label>
+                                <select name="payment_method"
+                                        class="w-full border border-gray-200 rounded-xl px-4 py-3 focus:border-black focus:ring-1 focus:ring-black outline-none transition"
+                                        required>
+                                    <option value="">Select payment method</option>
+                                    <option value="Bank Transfer" {{ old('payment_method') == 'Bank Transfer' ? 'selected' : '' }}>Bank Transfer (BCA/Mandiri)</option>
+                                    <option value="QRIS" {{ old('payment_method') == 'QRIS' ? 'selected' : '' }}>QRIS</option>
+                                    <option value="Credit Card" {{ old('payment_method') == 'Credit Card' ? 'selected' : '' }}>Credit / Debit Card</option>
+                                    <option value="E-Wallet" {{ old('payment_method') == 'E-Wallet' ? 'selected' : '' }}>E-Wallet (OVO, GoPay, DANA)</option>
+                                </select>
+                                @error('payment_method') <p class="text-sm text-red-600 mt-1">{{ $message }}</p> @enderror
+                            </div>
                         </div>
-                        <i class="fa-solid fa-chevron-right text-[10px] text-gray-400"></i>
                     </div>
                 </div>
 
-                <!-- Summary -->
-                <div class="pt-2">
-                    <div class="flex justify-between items-center mb-3 text-[14px]">
-                        <span class="text-gray-600">Subtotal <span class="text-gray-400 text-[12px]">• 1 Items</span></span>
-                        <span class="font-medium">Rp 1.649.250</span>
-                    </div>
-                    <div class="flex justify-between items-center mb-6 text-[14px]">
-                        <span class="text-gray-600">Shipping</span>
-                        <span class="text-gray-400">-</span>
-                    </div>
-                    <div class="flex justify-between items-center mb-6 text-[14px]">
-                        <span class="font-bold text-gray-900">Total Payment</span>
-                        <span class="font-bold text-[16px] text-gray-900">Rp 1.649.250</span>
-                    </div>
-                    
-                    <div class="flex items-center justify-center space-x-1.5 text-[11px] text-gray-500 mb-6">
-                        <i class="fa-solid fa-lock"></i>
-                        <span>Secure Payment | Your payment is encrypted.</span>
-                    </div>
+                {{-- Right Column: Order Summary --}}
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sticky top-24">
+                        <h2 class="text-lg font-semibold text-gray-900 mb-4">Order Summary</h2>
 
-                    <div class="bg-[#F3F4F8] text-[12px] text-gray-600 p-4 rounded-xl leading-relaxed mb-6">
-                        Import duty or tax might be charged depending on your delivery country.
-                    </div>
+                        {{-- Items --}}
+                        <div class="space-y-3 max-h-80 overflow-y-auto pr-2">
+                            @foreach($items as $item)
+                                <div class="flex gap-3 border-b border-gray-100 pb-3">
+                                    <img src="{{ $item['image'] }}" alt="{{ $item['name'] }}" class="w-16 h-16 object-contain bg-gray-50 rounded-lg">
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium text-gray-900 line-clamp-2">{{ $item['name'] }}</p>
+                                        <p class="text-xs text-gray-500">Qty: {{ $item['quantity'] }}</p>
+                                        <p class="text-sm font-semibold text-gray-900">Rp {{ number_format($item['price'] * $item['quantity'], 0, ',', '.') }}</p>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
 
-                    <a href="{{ url('/account') }}" class="block w-full bg-black text-white font-medium text-center py-3.5 rounded-xl hover:bg-gray-800 transition shadow-md mb-3 text-[14px]">
-                        Order Now
-                    </a>
-                    
-                    <p class="text-[11px] text-gray-500 text-center">
-                        By placing your order, you agree to our <a href="#" class="underline hover:text-black">Terms & Conditions</a>
-                    </p>
+                        {{-- Total --}}
+                        <div class="border-t border-gray-200 pt-4 mt-4 space-y-2">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-600">Subtotal</span>
+                                <span class="font-medium">Rp {{ number_format($total, 0, ',', '.') }}</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-600">Shipping</span>
+                                <span class="text-green-600 font-medium">Free</span>
+                            </div>
+                            <div class="flex justify-between text-lg font-bold pt-2 border-t border-gray-200">
+                                <span>Total</span>
+                                <span>Rp {{ number_format($total, 0, ',', '.') }}</span>
+                            </div>
+                        </div>
+
+                        {{-- Place Order Button --}}
+                        <button type="submit" class="w-full bg-black text-white text-sm font-semibold py-3.5 rounded-xl hover:bg-gray-800 transition mt-4 shadow-lg shadow-black/20">
+                            <i class="fa-solid fa-lock mr-2"></i> Place Order
+                        </button>
+
+                        <p class="text-xs text-gray-400 text-center mt-3">
+                            <i class="fa-solid fa-shield-halved mr-1"></i> Your payment is secure
+                        </p>
+                    </div>
                 </div>
             </div>
+        </form>
+    @else
+        <div class="text-center py-16">
+            <i class="fa-solid fa-cart-shopping text-4xl text-gray-300 mb-4"></i>
+            <h2 class="text-xl font-semibold text-gray-700">Your cart is empty</h2>
+            <a href="{{ route('products.index') }}" class="mt-4 inline-block bg-black text-white px-6 py-3 rounded-xl hover:bg-gray-800 transition">Continue Shopping</a>
         </div>
-    </main>
-
-</body>
-</html>
+    @endif
+</div>
+@endsection
