@@ -51,7 +51,7 @@ class CartController extends Controller
     public function add(Request $request)
     {
         $validated = $request->validate([
-            'product_id' => 'required|integer',
+            'product_id' => 'required|string',
             'quantity' => 'nullable|integer|min:1',
             'size' => 'nullable|string|max:20',
         ]);
@@ -60,13 +60,36 @@ class CartController extends Controller
         $quantity = max(1, (int) ($validated['quantity'] ?? 1));
         $size = $validated['size'] ?? 'One Size';
 
-        $response = Http::withoutVerifying()->get("https://fakestoreapi.com/products/{$id}");
+        if (strpos($id, 'db-') === 0) {
+            $dbId = str_replace('db-', '', $id);
+            $dbProduct = \App\Models\Product::find($dbId);
+            if (!$dbProduct) {
+                return back()->with('error', 'Produk tidak ditemukan.');
+            }
+            $productData = [
+                'id' => 'db-' . $dbProduct->id,
+                'name' => $dbProduct->name,
+                'price' => (int) $dbProduct->price,
+                'image' => $dbProduct->image,
+            ];
+        } else {
+            $response = Http::withoutVerifying()->get("https://fakestoreapi.com/products/{$id}");
 
-        if (! $response->successful()) {
-            return back()->with('error', 'Produk tidak ditemukan.');
+            if (! $response->successful()) {
+                return back()->with('error', 'Produk tidak ditemukan.');
+            }
+
+            $apiProduct = $response->json();
+            if (!$apiProduct) {
+                return back()->with('error', 'Produk tidak ditemukan.');
+            }
+            $productData = [
+                'id' => $apiProduct['id'],
+                'name' => $apiProduct['title'],
+                'price' => (int) round($apiProduct['price'] * 15000),
+                'image' => $apiProduct['image'],
+            ];
         }
-
-        $apiProduct = $response->json();
 
         $cart = session('cart', []);
 
@@ -74,10 +97,10 @@ class CartController extends Controller
             $cart[$id]['quantity'] += $quantity;
         } else {
             $cart[$id] = [
-                'id' => $apiProduct['id'],
-                'name' => $apiProduct['title'],
-                'price' => (int) round($apiProduct['price'] * 15000),
-                'image' => $apiProduct['image'],
+                'id' => $productData['id'],
+                'name' => $productData['name'],
+                'price' => $productData['price'],
+                'image' => $productData['image'],
                 'size' => $size,
                 'quantity' => $quantity,
             ];

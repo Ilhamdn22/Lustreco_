@@ -1,8 +1,8 @@
 <?php
 
 namespace App\View\Composers;
-use App\View\Composers\CartComposer;
-use Illuminate\Support\Facades\View;
+
+use Illuminate\View\View;
 
 class CartComposer
 {

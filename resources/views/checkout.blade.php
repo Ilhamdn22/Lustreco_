@@ -52,7 +52,13 @@
                                         class="w-full border border-gray-200 rounded-xl px-4 py-3 focus:border-black focus:ring-1 focus:ring-black outline-none transition"
                                         required>
                                     <option value="">Select payment method</option>
-                                    <option value="Bank Transfer" {{ old('payment_method') == 'Bank Transfer' ? 'selected' : '' }}>Bank Transfer (BCA/Mandiri)</option>
+                                    <option value="Midtrans" {{ old('payment_method') == 'Midtrans' ? 'selected' : '' }}>Midtrans (All Payment Methods)</option>
+                                    <option value="BCA Virtual Account" {{ old('payment_method') == 'BCA Virtual Account' ? 'selected' : '' }}>BCA Virtual Account</option>
+                                    <option value="Mandiri Virtual Account" {{ old('payment_method') == 'Mandiri Virtual Account' ? 'selected' : '' }}>Mandiri Virtual Account</option>
+                                    <option value="BNI Virtual Account" {{ old('payment_method') == 'BNI Virtual Account' ? 'selected' : '' }}>BNI Virtual Account</option>
+                                    <option value="BRI Virtual Account" {{ old('payment_method') == 'BRI Virtual Account' ? 'selected' : '' }}>BRI Virtual Account</option>
+                                    <option value="Permata Virtual Account" {{ old('payment_method') == 'Permata Virtual Account' ? 'selected' : '' }}>Permata Virtual Account</option>
+                                    <option value="Other Banks VA" {{ old('payment_method') == 'Other Banks VA' ? 'selected' : '' }}>Other Banks (ATM network)</option>
                                     <option value="QRIS" {{ old('payment_method') == 'QRIS' ? 'selected' : '' }}>QRIS</option>
                                     <option value="Credit Card" {{ old('payment_method') == 'Credit Card' ? 'selected' : '' }}>Credit / Debit Card</option>
                                     <option value="E-Wallet" {{ old('payment_method') == 'E-Wallet' ? 'selected' : '' }}>E-Wallet (OVO, GoPay, DANA)</option>

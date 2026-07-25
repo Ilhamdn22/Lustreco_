@@ -34,16 +34,20 @@
             <!-- CART WITH BADGE -->
             <a href="{{ route('cart.index') }}" class="relative hover:text-black transition">
                 <i class="fa-solid fa-bag-shopping text-[22px]"></i>
-                @php
-                    $cart = session('cart', []);
-                    $totalQty = collect($cart)->sum('quantity');
-                @endphp
-                @if($totalQty > 0)
+                @if(isset($cartCount) && $cartCount > 0)
                     <span class="absolute -top-2 -right-3 bg-red-500 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                        {{ $totalQty }}
+                        {{ $cartCount }}
                     </span>
                 @endif
             </a>
+
+            @auth
+                @if(auth()->user()->role === 'admin')
+                    <a href="{{ route('admin.dashboard') }}" class="hover:text-black transition" title="Admin Panel">
+                        <i class="fa-solid fa-gauge-high text-[22px]"></i>
+                    </a>
+                @endif
+            @endauth
 
             <a href="{{ route('account') }}" class="hover:text-black transition">
                 <i class="fa-regular fa-user text-[22px]"></i>
@@ -64,6 +68,11 @@
             </button>
         </div>
         <nav class="flex flex-col space-y-1 flex-grow">
+            @auth
+                @if(auth()->user()->role === 'admin')
+                    <a href="{{ route('admin.dashboard') }}" class="text-[14px] font-bold tracking-wide text-zinc-950 bg-zinc-100 hover:bg-zinc-200 transition-colors px-4 py-3 rounded-lg block"><i class="fa-solid fa-gauge-high mr-2"></i>ADMIN PANEL</a>
+                @endif
+            @endauth
             <a href="{{ route('products.index') }}" class="text-[14px] font-medium tracking-wide text-gray-900 hover:bg-[#d1d1d1] transition-colors px-4 py-3 rounded-lg block">SHOP</a>
             <a href="{{ route('about') }}" class="text-[14px] font-medium tracking-wide text-gray-900 hover:bg-[#d1d1d1] transition-colors px-4 py-3 rounded-lg block">ABOUT</a>
             <a href="#" class="text-[14px] font-medium tracking-wide text-gray-900 hover:bg-[#d1d1d1] transition-colors px-4 py-3 rounded-lg block">STORE</a>

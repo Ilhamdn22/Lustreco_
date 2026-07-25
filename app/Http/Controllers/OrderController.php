@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Midtrans\Config;
+use Midtrans\Transaction;
 
 class OrderController extends Controller
 {
@@ -27,33 +29,46 @@ class OrderController extends Controller
                 $productId = $request->query('product_id');
                 $quantity = max(1, (int) $request->query('quantity', 1));
 
-                // Ambil produk dari API
-                $response = Http::withoutVerifying()->get("https://fakestoreapi.com/products/{$productId}");
-                if ($response->successful()) {
-                    $apiProduct = $response->json();
+                if (strpos($productId, 'db-') === 0) {
+                    $dbId = str_replace('db-', '', $productId);
+                    $dbProduct = \App\Models\Product::find($dbId);
+                    if (!$dbProduct) {
+                        return redirect()->route('products.index')->with('error', 'Produk tidak ditemukan.');
+                    }
                     $product = (object) [
-                        'id' => $apiProduct['id'],
-                        'name' => $apiProduct['title'],
-                        'price' => (int) round($apiProduct['price'] * 15000),
-                        'image' => $apiProduct['image'],
+                        'id' => 'db-' . $dbProduct->id,
+                        'name' => $dbProduct->name,
+                        'price' => (int) $dbProduct->price,
+                        'image' => $dbProduct->image,
                     ];
-
-                    $item = [
-                        'id' => $product->id,
-                        'name' => $product->name,
-                        'price' => $product->price,
-                        'image' => $product->image,
-                        'quantity' => $quantity,
-                    ];
-
-                    // Simpan di session sementara untuk diproses di store
-                    session(['buy_now' => $item]);
-
-                    $items = collect([$item]);
-                    $total = $product->price * $quantity;
                 } else {
-                    return redirect()->route('products.index')->with('error', 'Produk tidak ditemukan.');
+                    // Ambil produk dari API
+                    $response = Http::withoutVerifying()->get("https://fakestoreapi.com/products/{$productId}");
+                    if ($response->successful() && $apiProduct = $response->json()) {
+                        $product = (object) [
+                            'id' => $apiProduct['id'],
+                            'name' => $apiProduct['title'],
+                            'price' => (int) round($apiProduct['price'] * 15000),
+                            'image' => $apiProduct['image'],
+                        ];
+                    } else {
+                        return redirect()->route('products.index')->with('error', 'Produk tidak ditemukan.');
+                    }
                 }
+
+                $item = [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'price' => $product->price,
+                    'image' => $product->image,
+                    'quantity' => $quantity,
+                ];
+
+                // Simpan di session sementara untuk diproses di store
+                session(['buy_now' => $item]);
+
+                $items = collect([$item]);
+                $total = $product->price * $quantity;
             } else {
                 // Ambil dari cart session
                 $cart = session('cart', []);
@@ -112,12 +127,13 @@ class OrderController extends Controller
             $order = DB::transaction(function () use ($request, $validated, $items, $total, $user) {
                 $order = Order::create([
                     'user_id' => $user->id,
-                    'order_number' => 'LUS-' . strtoupper(Str::random(8)),
                     'status' => 'pending',
+                    'subtotal' => $total,
                     'total' => $total,
                     'recipient_name' => $validated['recipient_name'],
-                    'shipping_address' => $validated['shipping_address'],
-                    'phone' => $validated['phone'],
+                    'recipient_phone' => $validated['phone'],
+                    'email' => $user->email,
+                    'address' => $validated['shipping_address'],
                     'payment_method' => $validated['payment_method'],
                 ]);
 
@@ -141,8 +157,8 @@ class OrderController extends Controller
                 session()->forget('cart');
             }
 
-            return redirect()->route('account')
-                ->with('success', 'Pesanan #' . $order->order_number . ' berhasil dibuat. Silakan selesaikan pembayaran.');
+            return redirect()->route('orders.show', $order)
+                ->with('success', 'Pesanan #' . $order->id . ' berhasil dibuat. Silakan selesaikan pembayaran.');
 
         } catch (\Illuminate\Validation\ValidationException $e) {
             return back()->withErrors($e->errors())->withInput();
@@ -163,6 +179,31 @@ class OrderController extends Controller
             // Pastikan user hanya bisa melihat order miliknya sendiri
             if ($order->user_id !== auth()->id()) {
                 abort(403, 'Unauthorized access to this order.');
+            }
+
+            // Fallback status check jika webhook belum masuk/tidak bisa masuk (e.g. localhost)
+            if ($order->payment_status === 'pending') {
+                $midtransOrderId = session('midtrans_order_id_' . $order->id);
+                if ($midtransOrderId) {
+                    try {
+                        Config::$serverKey = config('services.midtrans.server_key');
+                        Config::$isProduction = config('services.midtrans.is_production');
+
+                        $status = Transaction::status($midtransOrderId);
+                        $transactionStatus = $status->transaction_status ?? null;
+
+                        if ($transactionStatus === 'settlement' || $transactionStatus === 'capture') {
+                            $order->update([
+                                'payment_status' => 'success',
+                                'status' => 'processing',
+                            ]);
+                            $order->refresh();
+                            session()->forget('midtrans_order_id_' . $order->id);
+                        }
+                    } catch (\Exception $e) {
+                        Log::warning('Midtrans status pull warning: ' . $e->getMessage());
+                    }
+                }
             }
 
             return view('orders.show', compact('order'));

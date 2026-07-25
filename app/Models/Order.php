@@ -19,6 +19,8 @@ class Order extends Model
         'subtotal',
         'total',
         'status',
+        'payment_status',
+        'snap_token',
         'notes',
     ];
 

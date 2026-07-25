@@ -7,6 +7,8 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -96,7 +98,21 @@ Route::middleware('auth')->group(function () {
         Route::get('/checkout', 'checkout')->name('checkout');
         Route::post('/checkout', 'store')->name('checkout.store');
         Route::get('/orders/{order}', 'show')->name('orders.show');
-        Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+    });
+
+    // ---- Payment ----
+    Route::controller(PaymentController::class)->group(function () {
+        Route::get('/orders/{order}/snap-token', 'getSnapToken')->name('payment.snap-token');
+        Route::get('/orders/{order}/simulate-success', 'simulateSuccess')->name('payment.simulate-success');
+    });
+
+    // ---- Admin Panel ----
+    Route::controller(AdminController::class)->group(function () {
+        Route::get('/admin', 'index')->name('admin.dashboard');
+        Route::post('/admin/products', 'storeProduct')->name('admin.products.store');
+        Route::delete('/admin/products/{id}', 'deleteProduct')->name('admin.products.destroy');
+        Route::post('/admin/upload', 'uploadImage')->name('admin.upload');
+        Route::post('/admin/upload/delete', 'deleteImage')->name('admin.upload.destroy');
     });
 });
 
